@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BackGround : MonoBehaviour
 {
+    public GameManager manager;
     public float speed;
 
     void Update()
@@ -17,13 +18,14 @@ public class BackGround : MonoBehaviour
     {
         // 배경 왼쪽으로 이동
         Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.left * speed * Time.deltaTime;
+        Vector3 nextPos = Vector3.left * speed * manager.speed * Time.deltaTime;
         transform.position = curPos + nextPos;
     }
 
     void Scrolling()
     {
+        // 화면 밖으로 가면 다시 오른쪽으로 옮기기
         if (transform.position.x < -6)
-            transform.localPosition = transform.localPosition + Vector3.right * 21;
+            transform.localPosition = transform.localPosition + Vector3.right * 24;
     }
 }
