@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class BackGround : MonoBehaviour
 {
-    public GameManager manager;
     public float speed;
 
     void Update()
@@ -18,7 +17,7 @@ public class BackGround : MonoBehaviour
     {
         // 배경 왼쪽으로 이동
         Vector3 curPos = transform.position;
-        Vector3 nextPos = Vector3.left * speed * manager.speed * Time.deltaTime;
+        Vector3 nextPos = Vector3.left * speed * GameManager.instance.speed * Time.deltaTime;
         transform.position = curPos + nextPos;
     }
 

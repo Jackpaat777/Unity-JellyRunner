@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameManager manager;
     public float JumpPower;
 
     Rigidbody2D rigid;
@@ -21,7 +20,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (!manager.gameStart)
+        if (!GameManager.instance.gameStart)
         {
             PlayerSpriteSelect();
         }
@@ -39,7 +38,7 @@ public class Player : MonoBehaviour
     public void PlayerSpriteSelect()
     {
         // 게임매니저에 따라 플레이어 종류 변경
-        spriteRenderer.sprite = manager.jellySpriteList[manager.jellyNum];
+        spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.jellyNum];
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -48,6 +47,12 @@ public class Player : MonoBehaviour
         if (collision.gameObject.tag == "Platform")
         {
             anim.SetBool("isJump", false);
+        }
+
+        // 적과 부딫혔을 때
+        if (collision.gameObject.tag == "Enemy")
+        {
+            GameManager.instance.GameOver();
         }
     }
 }
