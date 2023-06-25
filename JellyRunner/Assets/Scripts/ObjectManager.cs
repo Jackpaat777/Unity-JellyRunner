@@ -51,4 +51,19 @@ public class ObjectManager : MonoBehaviour
         // select 반환
         return select;
     }
+
+    public void DisableEnemy(int index)
+    {
+        // 해당 index의 pool에서 활성화된 오브젝트 모두 비활성화
+        foreach (GameObject item in pools[index])
+        {
+            if (item.activeSelf)
+            {
+                // Explosion
+                GameManager.instance.CallExplosion(item.transform.position + Vector3.up * 0.5f);
+                GameManager.instance.score += 100;
+                item.SetActive(false);
+            }
+        }
+    }
 }

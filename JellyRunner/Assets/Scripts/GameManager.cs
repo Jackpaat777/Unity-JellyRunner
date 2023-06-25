@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
     [Header ("---------------[Jelly]")]
     public Sprite[] jellySpriteList;
     public string[] jellyNameList;
+    public Sprite sharkJellySkill;
     public Image jellyImageInPanel;
     public TextMeshProUGUI jellyNameInPanel;
     public int jellyNum;
@@ -25,20 +27,10 @@ public class GameManager : MonoBehaviour
     [Header("---------------[Skill]")]
     public bool onSkill;
     public float skillTime;
-
-    [Header("---------------[InGame]")]
-    public bool gameStart;
-    public bool isStop;
-    public GameObject optionPanel;
-    public GameObject blackPanel;
-    public GameObject leftButton;
-    public GameObject rightButton;
-    public TextMeshProUGUI scoreText;
-    public int score;
-    public float timer;
-    public float speed;
-    public bool isOver;
-    public GameObject overPanel;
+    public string[] skillName;
+    public Button skillButton;
+    public TextMeshProUGUI skillNameText;
+    public TextMeshProUGUI skillTimeText;
 
     [Header("---------------[Spawner]")]
     public ObjectManager objectManager;
@@ -46,21 +38,44 @@ public class GameManager : MonoBehaviour
     public float spawnDelay;
     public Transform spawnPoints;
 
+    [Header("---------------[InGame]")]
+    public float speed;
+    public bool gameStart;
+    public bool isStop;
+    public GameObject optionPanel;
+    public GameObject blackPanel;
+    public GameObject leftButton;
+    public GameObject rightButton;
+    public TextMeshProUGUI scoreText;
+    public GameObject overPanel;
+    public int score;
+    int scoreUp;
+    float timer;
+
     void Awake()
     {
         instance = this;
+        GameStart();
+    }
+
+    void GameStart()
+    {
+        scoreUp = 1;
+        timer = 0;
         // 처음에는 시간 멈추기
         StopSwitch();
     }
 
     void Update()
     {
+        skillNameText.text = skillName[jellyNum];
+
         // Scoring
         timer += Time.deltaTime;
         if (timer > 0.1f)
         {
             // 스피드에 따른 점수올리기
-            score += (int)(speed * 2);
+            score += (int)(speed * 2 * scoreUp);
             scoreText.text = score.ToString("N0");
             timer = 0;
         }
@@ -80,6 +95,7 @@ public class GameManager : MonoBehaviour
             skillTime += Time.deltaTime;
             UniqueSkill();
         }
+        skillTimeText.text = skillTime.ToString("F1");
     }
 
     void SpawnEnemy()
@@ -114,11 +130,13 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0;
             isStop = true;
+            skillButton.interactable = false;
         }
         else
         {
             Time.timeScale = 1;
             isStop = false;
+            skillButton.interactable = true;
         }
     }
     
@@ -148,20 +166,6 @@ public class GameManager : MonoBehaviour
         jellyImageInPanel.SetNativeSize();
         jellyNameInPanel.text = jellyNameList[jellyNum];
     }
-    //public void SpeedUp()
-    //{
-    //    speed += 0.5f;
-    //    playerAc.SetFloat("runSpeed", speed);
-    //}
-    //public void SpeedDown()
-    //{
-    //    if (speed > 0.5f)
-    //    {
-    //        speed -= 0.5f;
-    //        playerAc.SetFloat("runSpeed", speed);
-    //    }
-
-    //}
 
 
     // ------------- 스킬 관련 함수들
@@ -180,24 +184,42 @@ public class GameManager : MonoBehaviour
                 JumpUp();
                 break;
             case 2:
-                AllKill();
+                ScoreUp();
                 break;
             case 3:
+                PressDown();
                 break;
             case 4:
+                Invisibility();
                 break;
             case 5:
+                GetBarrier();
                 break;
             case 6:
+                DoubleJump();
+                break;
+            case 7:
+                Buster();
+                break;
+            case 8:
+                SushiAttack();
+                break;
+            case 9:
+                AllKill();
+                break;
+            case 10:
+                GiantJelly();
+                break;
+            default:
                 break;
         }
     }
     void SpeedUp()
     {
-        // 3초동안 스피드 3배 업
+        // 3초동안 스피드 2배 업
         if (skillTime < 3f)
         {
-            speed = 3;
+            speed = 2;
         }
         else
         {
@@ -211,18 +233,151 @@ public class GameManager : MonoBehaviour
         // 10초동안 점프 증가
         if (skillTime < 10f)
         {
-            player.JumpPower = 8;
+            player.jumpPower = 8;
         }
         else
         {
-            player.JumpPower = 6;
+            player.jumpPower = 6;
             skillTime = 0;
             onSkill = false;
         }
     }
+    void ScoreUp()
+    {
+        // 10초동안 스코어 5배
+        if (skillTime < 10f)
+        {
+            scoreUp = 5;
+        }
+        else
+        {
+            scoreUp = 1;
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    void PressDown()
+    {
+        // 10초동안 밟기 가능
+        if (skillTime < 10f)
+        {
+            player.isPress = true;
+        }
+        else
+        {
+            player.isPress = false;
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    void Invisibility()
+    {
+        // 8초동안 투명화
+        if (skillTime < 8f)
+        {
+            player.AlphaDown();
+        }
+        else
+        {
+            player.AlphaUp();
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    void GetBarrier()
+    {
+        player.isBarrier = true;
+        skillTime = 0;
+    }
+    void DoubleJump()
+    {
+        // 10초동안 더블점프 가능
+        if (skillTime < 10f)
+        {
+            player.isdoubleJump = true;
+        }
+        else
+        {
+            player.isdoubleJump = false;
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    void Buster()
+    {
+        // 8초동안 무적 부스트
+        if (skillTime < 7f)
+        {
+            player.BustOn();
+        }
+        else if (skillTime < 8f)
+        {
+            player.BustOff();
+            player.AlphaDown();
+        }
+        else
+        {
+            player.AlphaUp();
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    void SushiAttack()
+    {
+        if (player.bullet.activeSelf)
+        {
+            onSkill = false;
+            return;
+        }
+
+        ReRoad();
+        player.bullet.SetActive(true);
+        skillTime = 0;
+        onSkill = false;
+    }
+    public void ReRoad()
+    {
+        player.bullet.transform.position = player.transform.position;
+    }
     void AllKill()
     {
+        for (int i = 0; i < 11; i++)
+        {
+            objectManager.DisableEnemy(i);
+        }
+        // 3초동안 추가 적 생성막기
+        spawnTimer = 0;
+        spawnDelay = 3;
 
+        skillTime = 0;
+        onSkill = false;
+    }
+    void GiantJelly()
+    {
+        // 10초동안 무적 거대화
+        if (skillTime < 8f)
+        {
+            player.GrowUp();
+        }
+        else if (skillTime < 10f)
+        {
+            player.GrowDown();
+            player.AlphaDown();
+        }
+        else
+        {
+            player.AlphaUp();
+            skillTime = 0;
+            onSkill = false;
+        }
+    }
+    public void CallExplosion(Vector3 pos)
+    {
+        GameObject explosion = objectManager.Get(11);
+        Explosion explosionLogic = explosion.GetComponent<Explosion>();
+
+        explosion.transform.position = pos;
+        explosionLogic.StartExplosion();
     }
 
     // ------------- 게임작동 관련 함수들

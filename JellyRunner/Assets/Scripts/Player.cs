@@ -5,14 +5,25 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float JumpPower;
+    public GameObject barrierEffect;
+    public GameObject pressSensor;
+    public GameObject bullet;
+    public float jumpPower;
+    public bool isdoubleJump;
+    public bool isBarrier;
+    public bool isInvisibile;
+    public bool isBust;
+    public bool isPress;
+    public bool isGiant;
 
+    int jumpNum;
     Rigidbody2D rigid;
     Animator anim;
     SpriteRenderer spriteRenderer;
 
     void Awake()
     {
+        jumpNum = 0;
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -20,39 +31,123 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // ê²Œì„ ì‹œì‘ ì‹œ ìºë¦­í„° ì„ íƒ
         if (!GameManager.instance.gameStart)
         {
             PlayerSpriteSelect();
         }
 
+        // Move Anim
+        anim.SetFloat("runSpeed", GameManager.instance.speed);
+
         // Jump
-        // ¹°¸®¹ıÄ¢ÀÌÁö¸¸ Fixed¿¡¼­´Â ÇÁ·¹ÀÓÀÌ ´À¸®±â ¶§¹®¿¡ Update¿¡¼­ Ã³¸®
-        // ¸ğ¹ÙÀÏ¿¡¼­´Â Fixed¿¡¼­ Àß Ã³¸®µÇ´ÂÁö È®ÀÎÇØº¸±â
-        if (Input.GetButtonDown("Jump") && !anim.GetBool("isJump"))
+        if (Input.GetButtonDown("Jump") && !isGiant && !isBust)
         {
-            rigid.AddForce(Vector2.up * JumpPower, ForceMode2D.Impulse);
-            anim.SetBool("isJump", true);
+            // double Jumpê°€ ì¼œì ¸ìˆì„ ë•Œ
+            if (isdoubleJump)
+            {
+                if (jumpNum < 2) // ì í”„ë¥¼ ë‘ë²ˆí•˜ê¸° ì „ê¹Œì§€ ê³„ì† ì í”„
+                {
+                    jumpPower = rigid.velocity.y > 0 ? 3 : 6; // ì´ë¯¸ ì˜¬ë¼ê°€ê³  ìˆì„ ë•ŒëŠ” ì í”„ë ¥ ê°ì†Œ
+                    PlayerJump();
+                    jumpNum++;
+                }
+            }
+            // double Jumpê°€ ì•ˆì¼œì ¸ìˆì„ ë•Œ
+            else if (!anim.GetBool("isJump"))
+            {
+                PlayerJump();
+            }
         }
+
+        // Barrier Effect
+        if (isBarrier)
+            barrierEffect.SetActive(true);
+        else
+            barrierEffect.SetActive(false);
+
+        // Bullet
+        if (bullet.activeSelf)
+        {
+            // bulletì´ í™”ë©´ ë°–ìœ¼ë¡œ ë‚˜ê°ˆ ë•Œ
+            if (bullet.transform.position.x > 17)
+                bullet.SetActive(false);
+
+            // ì´ì•Œì€ íšŒì „í•˜ë©°, ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
+            Vector3 curPos = bullet.transform.position;
+            Vector3 nextPos = Vector3.right * 5 * Time.deltaTime;
+            bullet.transform.position = curPos + nextPos;
+        }
+
+        // Press
+        pressSensor.transform.position = transform.position;
+    }
+
+    public void PlayerJump()
+    {
+        rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        anim.SetBool("isJump", true);
     }
 
     public void PlayerSpriteSelect()
     {
-        // °ÔÀÓ¸Å´ÏÀú¿¡ µû¶ó ÇÃ·¹ÀÌ¾î Á¾·ù º¯°æ
+        // ìºë¦­í„° ì„ íƒ
         spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.jellyNum];
+    }
+
+    // ------------ ìŠ¤í‚¬ ê´€ë ¨ í•¨ìˆ˜ë“¤
+    public void AlphaDown()
+    {
+        isInvisibile = true;
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+    }
+    public void AlphaUp()
+    {
+        isInvisibile = false;
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+    }
+    public void GrowUp()
+    {
+        isGiant = true;
+        anim.SetBool("isMax", true);
+    }
+    public void GrowDown()
+    {
+        isGiant = false;
+        anim.SetBool("isMax", false);
+    }
+    public void BustOn()
+    {
+        isBust = true;
+        if (transform.position.y < 0.1f)
+            spriteRenderer.sprite = GameManager.instance.sharkJellySkill;
+        GameManager.instance.speed = 5;
+    }
+    public void BustOff()
+    {
+        isBust = false;
+        spriteRenderer.sprite = GameManager.instance.jellySpriteList[7];
+        GameManager.instance.speed = 1;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        // ÂøÁö
+        // ì°©ì§€
         if (collision.gameObject.tag == "Platform")
         {
             anim.SetBool("isJump", false);
+            jumpNum = 0; // ë”ë¸”ì í”„ìš© ë³€ìˆ˜
         }
 
-        // Àû°ú ºÎ‹HÇûÀ» ¶§
         if (collision.gameObject.tag == "Enemy")
         {
-            GameManager.instance.GameOver();
+            if (isGiant)
+            {
+                collision.gameObject.SetActive(false);
+                GameManager.instance.score += 200;
+            }
+            else
+                GameManager.instance.GameOver();
         }
     }
 }
