@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+   Player playerLogic;
+
+    void Awake()
+    {
+        playerLogic = GameManager.instance.player.GetComponent<Player>();
+    }
+
     void Update()
     {
         // Move
@@ -21,11 +28,13 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.tag == "Bullet")
         {
             // Explosion
-            GameManager.instance.CallExplosion(collision.transform.position);
+            GameManager.instance.CallExplosion(collision.transform.position + Vector3.up * 0.5f);
             collision.gameObject.SetActive(false);
             // Score
-            GameManager.instance.score += 100;
-            // Bullet ReRoad
+            GameManager.instance.score += (int)(100 + (playerLogic.bullet.transform.localScale.x - 0.5f) * 100);
+            // Grow Up
+            GameManager.instance.SushiGrowUp();
+            // ReRoad
             gameObject.SetActive(false);
             GameManager.instance.ReRoad();
         }

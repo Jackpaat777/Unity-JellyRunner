@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject barrierEffect;
+    public GameObject barrierSensor;
     public GameObject pressSensor;
+    public GameObject giantSensor;
     public GameObject bullet;
     public float jumpPower;
     public bool isdoubleJump;
@@ -40,6 +41,10 @@ public class Player : MonoBehaviour
         // Move Anim
         anim.SetFloat("runSpeed", GameManager.instance.speed);
 
+        // SKill Button
+        if (Input.GetKeyDown(KeyCode.K))
+            GameManager.instance.OnSkill();
+
         // Jump
         if (Input.GetButtonDown("Jump") && !isGiant && !isBust)
         {
@@ -60,12 +65,6 @@ public class Player : MonoBehaviour
             }
         }
 
-        // Barrier Effect
-        if (isBarrier)
-            barrierEffect.SetActive(true);
-        else
-            barrierEffect.SetActive(false);
-
         // Bullet
         if (bullet.activeSelf)
         {
@@ -79,20 +78,35 @@ public class Player : MonoBehaviour
             bullet.transform.position = curPos + nextPos;
         }
 
-        // Press
-        pressSensor.transform.position = transform.position;
-    }
+        // -----------------센서
+        // Barrier Sensor
+        if (isBarrier)
+            barrierSensor.SetActive(true);
+        else
+            barrierSensor.SetActive(false);
 
-    public void PlayerJump()
-    {
-        rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        anim.SetBool("isJump", true);
+        // Press Sensor
+        if (isPress)
+            pressSensor.gameObject.SetActive(true);
+        else
+            pressSensor.gameObject.SetActive(false);
+
+        // Giant Sensor
+        if (isGiant)
+            giantSensor.SetActive(true);
+        else
+            giantSensor.SetActive(false);
     }
 
     public void PlayerSpriteSelect()
     {
         // 캐릭터 선택
         spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.jellyNum];
+    }
+    public void PlayerJump()
+    {
+        rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        anim.SetBool("isJump", true);
     }
 
     // ------------ 스킬 관련 함수들
@@ -120,14 +134,14 @@ public class Player : MonoBehaviour
     {
         isBust = true;
         if (transform.position.y < 0.1f)
-            spriteRenderer.sprite = GameManager.instance.sharkJellySkill;
-        GameManager.instance.speed = 5;
+            spriteRenderer.sprite = GameManager.instance.sharkSkillSprite;
+        GameManager.instance.speedUp = 5;
     }
     public void BustOff()
     {
         isBust = false;
         spriteRenderer.sprite = GameManager.instance.jellySpriteList[7];
-        GameManager.instance.speed = 1;
+        GameManager.instance.speedUp = 0;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -141,13 +155,8 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.tag == "Enemy")
         {
-            if (isGiant)
-            {
-                collision.gameObject.SetActive(false);
-                GameManager.instance.score += 200;
-            }
-            else
-                GameManager.instance.GameOver();
+            // 센서 뚫고 플레이어랑 닿으면 게임 종료
+            GameManager.instance.GameOver();
         }
     }
 }

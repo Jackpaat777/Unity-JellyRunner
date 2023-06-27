@@ -8,6 +8,7 @@ public class Sensor : MonoBehaviour
     public Player player;
     public bool isBarrierSensor;
     public bool isPressSensor;
+    public bool isGiantSensor;
 
     // 플레이어가 직접 적과 부딫혔을 때 트리거를 키는 것에 대한 문제 (플레이어가 밀림)
     void OnTriggerEnter2D(Collider2D collision)
@@ -22,7 +23,8 @@ public class Sensor : MonoBehaviour
                 collision.gameObject.SetActive(false);
                 // 스킬 종료
                 player.isBarrier = false;
-                GameManager.instance.onSkill = false;
+                GameManager.instance.OnSkill();
+                GameManager.instance.OnCool();
             }
             // 밟기는 isPressSensor가 켜진 센서에서만 작동
             else if (isPressSensor && player.isPress)
@@ -32,6 +34,12 @@ public class Sensor : MonoBehaviour
                 GameManager.instance.CallExplosion(collision.transform.position + Vector3.up * 0.5f);
                 collision.gameObject.SetActive(false);
 
+            }
+            // 거대화로 적 처치는 isGiantSensor가 켜진 센서에서만 작동
+            else if (isGiantSensor && player.isGiant)
+            {
+                collision.gameObject.SetActive(false);
+                GameManager.instance.score += 200;
             }
             else if (player.isInvisibile || player.isBust)
             {

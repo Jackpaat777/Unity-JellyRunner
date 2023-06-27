@@ -61,7 +61,7 @@ public class ObjectManager : MonoBehaviour
             {
                 // Explosion
                 GameManager.instance.CallExplosion(item.transform.position + Vector3.up * 0.5f);
-                GameManager.instance.score += 100;
+                GameManager.instance.score += 200;
                 item.SetActive(false);
             }
         }
