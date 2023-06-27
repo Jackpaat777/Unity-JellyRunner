@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     public Sprite sharkSkillSprite;
     public Image jellyImageInPanel;
     public TextMeshProUGUI jellyNameInPanel;
-    public int jellyNum;
+    public int typeNum;
 
     [Header("---------------[Player]")]
     public Player player;
@@ -50,13 +50,11 @@ public class GameManager : MonoBehaviour
     public int score;
     public TextMeshProUGUI scoreText;
     public float timer;
-    bool isStop;
     int scoreUp;
     float scoreTimer;
 
     [Header("---------------[UI]")]
     public GameObject optionPanel;
-    public GameObject blackPanel;
     public GameObject leftButton;
     public GameObject rightButton;
     public GameObject overPanel;
@@ -72,7 +70,8 @@ public class GameManager : MonoBehaviour
         scoreUp = 1;
         scoreTimer = 0;
         // 처음에는 시간 멈추기
-        StopSwitch();
+        Time.timeScale = 0;
+        skillButton.interactable = false;
     }
 
     void Update()
@@ -104,7 +103,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Skill
-        skillNameText.text = skillName[jellyNum];
+        skillNameText.text = skillName[typeNum];
 
         if (onCool)     // 쿨타임 시작
         {
@@ -112,7 +111,7 @@ public class GameManager : MonoBehaviour
             coolTimeText.gameObject.SetActive(true);
 
             // 쿨타임 시간이 지나면
-            if (coolTime > skillCoolList[jellyNum])
+            if (coolTime > skillCoolList[typeNum])
             {
                 CoolTimeOff();
             }
@@ -124,26 +123,24 @@ public class GameManager : MonoBehaviour
             if (onSkill)    // 쿨타임이 끝나고 나서 스킬 발동 가능
             {
                 skillTime += Time.deltaTime;
-                UniqueSkill();
+                ExecuteJellySkill();
             }
         }
-        skillTimeText.text = (skillDurationList[jellyNum] - skillTime).ToString("F1");
-        coolTimeText.text = (skillCoolList[jellyNum] - coolTime).ToString("F1");
+        skillTimeText.text = (skillDurationList[typeNum] - skillTime).ToString("F1");
+        coolTimeText.text = (skillCoolList[typeNum] - coolTime).ToString("F1");
     }
 
     public void StopSwitch()
     {
         // 게임을 멈추고 키는 스위치 (버튼조작도 막아놓기)
-        if (!isStop)
+        if (Time.timeScale == 1)
         {
             Time.timeScale = 0;
-            isStop = true;
             skillButton.interactable = false;
         }
         else
         {
             Time.timeScale = 1;
-            isStop = false;
             skillButton.interactable = true;
         }
     }
@@ -157,15 +154,17 @@ public class GameManager : MonoBehaviour
     }
     public void OptionButton()
     {
-        // 게임이 멈추면 옵션패널 보이기
         StopSwitch();
-        optionPanel.SetActive(isStop);
-        blackPanel.SetActive(isStop);
+        if (Time.timeScale == 0)
+            optionPanel.SetActive(true);
+        else
+            optionPanel.SetActive(false);
     }
     void SpawnEnemy()
     {
         // 랜덤 적 생성 (오브젝트매니저에서 랜덤값의 인덱스가 넘겨짐)
-        GameObject enemy = objectManager.Get(Random.Range(0, 11));
+        int randNum = Random.Range(0, jellySpriteList.Length);
+        GameObject enemy = objectManager.Get(randNum);
         enemy.transform.position = spawnPoints.position;
 
     }
@@ -174,24 +173,23 @@ public class GameManager : MonoBehaviour
     // ------------- 버튼 관련 함수들
     public void PageUp()
     {
-        jellyNum++;
-        if (jellyNum > 10)
-            jellyNum = 0;
+        typeNum++;
+        if (typeNum > jellySpriteList.Length - 1)
+            typeNum = 0;
 
-        jellyImageInPanel.sprite = jellySpriteList[jellyNum];
+        jellyImageInPanel.sprite = jellySpriteList[typeNum];
         jellyImageInPanel.SetNativeSize();
-        jellyNameInPanel.text = jellyNameList[jellyNum];
+        jellyNameInPanel.text = jellyNameList[typeNum];
     }
     public void PageDown()
     {
-        jellyNum--;
-        if (jellyNum < 0)
-            jellyNum = 10;
+        typeNum--;
+        if (typeNum < 0)
+            typeNum = jellySpriteList.Length - 1;
 
-
-        jellyImageInPanel.sprite = jellySpriteList[jellyNum];
+        jellyImageInPanel.sprite = jellySpriteList[typeNum];
         jellyImageInPanel.SetNativeSize();
-        jellyNameInPanel.text = jellyNameList[jellyNum];
+        jellyNameInPanel.text = jellyNameList[typeNum];
     }
 
 
@@ -211,9 +209,9 @@ public class GameManager : MonoBehaviour
     {
         onCool = true;
     }
-    void UniqueSkill()
+    void ExecuteJellySkill()
     {
-        switch (jellyNum)
+        switch (typeNum)
         {
             case 0:
                 SpeedUp();
@@ -264,7 +262,7 @@ public class GameManager : MonoBehaviour
     void SpeedUp()
     {
         // 스피드 2 증가
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
             speedUp = 2;
         }
@@ -279,7 +277,7 @@ public class GameManager : MonoBehaviour
     void JumpUp()
     {
         // 점프 증가
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
             player.jumpPower = 8;
         }
@@ -294,7 +292,7 @@ public class GameManager : MonoBehaviour
     void ScoreUp()
     {
         // 스코어 3배
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
             scoreUp = 3;
         }
@@ -309,13 +307,13 @@ public class GameManager : MonoBehaviour
     void PressDown()
     {
         // 밟기 가능
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
-            player.isPress = true;
+            player.skillType = Player.SkillType.PRESS_DOWN;
         }
         else
         {
-            player.isPress = false;
+            player.skillType = Player.SkillType.NONE;
             skillTime = 0;
             onSkill = false;
             onCool = true;
@@ -324,7 +322,7 @@ public class GameManager : MonoBehaviour
     void Invisibility()
     {
         // 투명화
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
             player.AlphaDown();
         }
@@ -338,19 +336,19 @@ public class GameManager : MonoBehaviour
     }
     void GetBarrier()
     {
-        player.isBarrier = true;
+        player.skillType = Player.SkillType.BARRIER;
         skillTime = 0;
     }
     void DoubleJump()
     {
         // 더블점프 가능
-        if (skillTime < skillDurationList[jellyNum])
+        if (skillTime < skillDurationList[typeNum])
         {
-            player.isdoubleJump = true;
+            player.skillType = Player.SkillType.DOUBLE_JUMP;
         }
         else
         {
-            player.isdoubleJump = false;
+            player.skillType = Player.SkillType.NONE;
             skillTime = 0;
             onSkill = false;
             onCool = true;
@@ -359,11 +357,11 @@ public class GameManager : MonoBehaviour
     void Buster()
     {
         // 무적 부스트
-        if (skillTime < skillDurationList[jellyNum] - 1f)
+        if (skillTime < skillDurationList[typeNum] - 1f)
         {
             player.BustOn();
         }
-        else if (skillTime < skillDurationList[jellyNum])
+        else if (skillTime < skillDurationList[typeNum])
         {
             player.BustOff();
             player.AlphaDown();
@@ -405,7 +403,7 @@ public class GameManager : MonoBehaviour
     void AllKill()
     {
         // 올 킬
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < jellySpriteList.Length; i++)
         {
             objectManager.DisableEnemy(i);
         }
@@ -420,11 +418,11 @@ public class GameManager : MonoBehaviour
     void GiantJelly()
     {
         // 무적 거대화
-        if (skillTime < skillDurationList[jellyNum] - 2f)
+        if (skillTime < skillDurationList[typeNum] - 2f)
         {
             player.GrowUp();
         }
-        else if (skillTime < skillDurationList[jellyNum])
+        else if (skillTime < skillDurationList[typeNum])
         {
             player.GrowDown();
             player.AlphaDown();

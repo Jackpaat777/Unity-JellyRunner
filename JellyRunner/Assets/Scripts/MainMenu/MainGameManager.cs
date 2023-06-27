@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Threading;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainGameManager : MonoBehaviour
 {
+    [Header("---------------[Collection]")]
     public int pageNum;
     public Image jellyImageInPanel;
     public string[] jellyNameList;
@@ -15,11 +17,25 @@ public class MainGameManager : MonoBehaviour
     public float[] skillDurationList;
     public float[] skillCoolList;
     public Sprite[] jellySpriteList;
+    public TextMeshProUGUI jellyNumText;
     public TextMeshProUGUI jellyName;
     public TextMeshProUGUI jellySkillName;
     public TextMeshProUGUI jellySkillText;
     public TextMeshProUGUI jellySkillDuration;
     public TextMeshProUGUI jellySkillCool;
+
+    [Header("---------------[Option]")]
+    public GameObject optionPanel;
+
+    void Awake()
+    {
+        Time.timeScale = 1;
+    }
+
+    public void OpenOptionPanel()
+    {
+        optionPanel.SetActive(false);
+    }
 
     // 도감 관련 함수
     void SkillText(int type)
@@ -63,12 +79,12 @@ public class MainGameManager : MonoBehaviour
                 break;
         }
     }
-
     public void OpenPanel(int selectNum)
     {
         pageNum = selectNum;
 
         // 젤리 도감 관련 변수들 변경
+        jellyNumText.text = (pageNum + 1).ToString();
         jellyImageInPanel.sprite = jellySpriteList[pageNum];
         jellyImageInPanel.SetNativeSize();
         jellyName.text = jellyNameList[pageNum];
@@ -90,5 +106,11 @@ public class MainGameManager : MonoBehaviour
         if (pageNum < 0)
             pageNum = 10;
         OpenPanel(pageNum);
+    }
+
+    // 게임작동 관련 함수
+    public void GameStart()
+    {
+        SceneManager.LoadScene(1);
     }
 }

@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public enum SkillType
+    {
+        NONE,
+        DOUBLE_JUMP,
+        BARRIER,
+        INVISIBLE,
+        BUSTER,
+        PRESS_DOWN,
+        GIANT
+    }
+
     public GameObject barrierSensor;
     public GameObject pressSensor;
     public GameObject giantSensor;
     public GameObject bullet;
     public float jumpPower;
-    public bool isdoubleJump;
-    public bool isBarrier;
-    public bool isInvisibile;
-    public bool isBust;
-    public bool isPress;
-    public bool isGiant;
+    public SkillType skillType;
 
     int jumpNum;
     Rigidbody2D rigid;
@@ -46,10 +52,10 @@ public class Player : MonoBehaviour
             GameManager.instance.OnSkill();
 
         // Jump
-        if (Input.GetButtonDown("Jump") && !isGiant && !isBust)
+        if (Input.GetButtonDown("Jump") && skillType != SkillType.GIANT && skillType != SkillType.BUSTER)
         {
             // double Jump가 켜져있을 때
-            if (isdoubleJump)
+            if (skillType == SkillType.DOUBLE_JUMP)
             {
                 if (jumpNum < 2) // 점프를 두번하기 전까지 계속 점프
                 {
@@ -79,29 +85,29 @@ public class Player : MonoBehaviour
         }
 
         // -----------------센서
-        // Barrier Sensor
-        if (isBarrier)
-            barrierSensor.SetActive(true);
-        else
-            barrierSensor.SetActive(false);
-
-        // Press Sensor
-        if (isPress)
-            pressSensor.gameObject.SetActive(true);
-        else
-            pressSensor.gameObject.SetActive(false);
-
-        // Giant Sensor
-        if (isGiant)
-            giantSensor.SetActive(true);
-        else
-            giantSensor.SetActive(false);
+        switch (skillType)
+        {
+            case SkillType.BARRIER:
+                barrierSensor.SetActive(true);
+                break;
+            case SkillType.PRESS_DOWN:
+                pressSensor.SetActive(true);
+                break;
+            case SkillType.GIANT:
+                giantSensor.SetActive(true);
+                break;
+            default:
+                barrierSensor.SetActive(false);
+                pressSensor.SetActive(false);
+                giantSensor.SetActive(false);
+                break;
+        }
     }
 
     public void PlayerSpriteSelect()
     {
         // 캐릭터 선택
-        spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.jellyNum];
+        spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.typeNum];
     }
     public void PlayerJump()
     {
@@ -112,34 +118,34 @@ public class Player : MonoBehaviour
     // ------------ 스킬 관련 함수들
     public void AlphaDown()
     {
-        isInvisibile = true;
+        skillType = SkillType.INVISIBLE;
         spriteRenderer.color = new Color(1, 1, 1, 0.5f);
     }
     public void AlphaUp()
     {
-        isInvisibile = false;
+        skillType = SkillType.NONE;
         spriteRenderer.color = new Color(1, 1, 1, 1);
     }
     public void GrowUp()
     {
-        isGiant = true;
+        skillType = SkillType.GIANT;
         anim.SetBool("isMax", true);
     }
     public void GrowDown()
     {
-        isGiant = false;
+        skillType = SkillType.NONE;
         anim.SetBool("isMax", false);
     }
     public void BustOn()
     {
-        isBust = true;
+        skillType = SkillType.BUSTER;
         if (transform.position.y < 0.1f)
             spriteRenderer.sprite = GameManager.instance.sharkSkillSprite;
         GameManager.instance.speedUp = 5;
     }
     public void BustOff()
     {
-        isBust = false;
+        skillType = SkillType.NONE;
         spriteRenderer.sprite = GameManager.instance.jellySpriteList[7];
         GameManager.instance.speedUp = 0;
     }

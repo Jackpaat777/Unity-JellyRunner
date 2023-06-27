@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class Sensor : MonoBehaviour
 {
+    public enum SensorType
+    {
+        Enemy,
+        BARRIER,
+        PRESS,
+        GIANT
+    }
+
     public Player player;
-    public bool isBarrierSensor;
-    public bool isPressSensor;
-    public bool isGiantSensor;
+    public SensorType sensorType;
 
     // 플레이어가 직접 적과 부딫혔을 때 트리거를 키는 것에 대한 문제 (플레이어가 밀림)
     void OnTriggerEnter2D(Collider2D collision)
@@ -16,18 +22,18 @@ public class Sensor : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             // 베리어는 isBarrierSensor가 켜진 센서에서만 작동
-            if (isBarrierSensor && player.isBarrier)
+            if (sensorType == SensorType.BARRIER && player.skillType == Player.SkillType.BARRIER)
             {
                 // Explosion
                 GameManager.instance.CallExplosion(collision.transform.position + Vector3.up * 0.5f);
                 collision.gameObject.SetActive(false);
                 // 스킬 종료
-                player.isBarrier = false;
+                player.skillType = Player.SkillType.NONE;
                 GameManager.instance.OnSkill();
                 GameManager.instance.OnCool();
             }
             // 밟기는 isPressSensor가 켜진 센서에서만 작동
-            else if (isPressSensor && player.isPress)
+            else if (sensorType == SensorType.PRESS && player.skillType == Player.SkillType.PRESS_DOWN)
             {
                 player.PlayerJump();
                 // Explosion
@@ -36,12 +42,12 @@ public class Sensor : MonoBehaviour
 
             }
             // 거대화로 적 처치는 isGiantSensor가 켜진 센서에서만 작동
-            else if (isGiantSensor && player.isGiant)
+            else if (sensorType == SensorType.GIANT && player.skillType == Player.SkillType.GIANT)
             {
                 collision.gameObject.SetActive(false);
                 GameManager.instance.score += 200;
             }
-            else if (player.isInvisibile || player.isBust)
+            else if (player.skillType == Player.SkillType.INVISIBLE || player.skillType == Player.SkillType.BUSTER)
             {
                 collision.isTrigger = true;
             }
