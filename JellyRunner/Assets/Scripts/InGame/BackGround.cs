@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BackGround : MonoBehaviour
+public class Background : MonoBehaviour
 {
     public float speed;
 

@@ -34,16 +34,13 @@ public class Player : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // 게임 시작 시 캐릭터 이미지 가져오기
+        spriteRenderer.sprite = GameManager.instance.jellySpriteList[Variables.jellyTypeNum];
     }
 
     void Update()
     {
-        // 게임 시작 시 캐릭터 선택
-        if (!GameManager.instance.gameStart)
-        {
-            PlayerSpriteSelect();
-        }
-
         // Move Anim
         anim.SetFloat("runSpeed", GameManager.instance.speed);
 
@@ -104,11 +101,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void PlayerSpriteSelect()
-    {
-        // 캐릭터 선택
-        spriteRenderer.sprite = GameManager.instance.jellySpriteList[GameManager.instance.typeNum];
-    }
     public void PlayerJump()
     {
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
