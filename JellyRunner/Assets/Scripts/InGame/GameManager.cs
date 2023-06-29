@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour
     public Sprite[] jellySpriteList;
     public string[] jellyNameList;
     public Sprite sharkSkillSprite;
-    public Image jellyImageInPanel;
-    public TextMeshProUGUI jellyNameInPanel;
 
     [Header("---------------[Player]")]
     public Player player;
@@ -52,9 +50,8 @@ public class GameManager : MonoBehaviour
     float scoreTimer;
 
     [Header("---------------[UI]")]
+    public TextMeshProUGUI jelatinOver;
     public GameObject optionPanel;
-    public GameObject leftButton;
-    public GameObject rightButton;
     public GameObject overPanel;
 
     void Awake()
@@ -412,6 +409,7 @@ public class GameManager : MonoBehaviour
     // ------------- 게임작동 관련 함수들
     public void GameOver()
     {
+        jelatinOver.text = "+ " + score.ToString("F0");
         MainGameManager.instance.AddJelatin(score);
         StopSwitch();
         overPanel.SetActive(true);
