@@ -25,6 +25,9 @@ public class Background : MonoBehaviour
     {
         // 화면 밖으로 가면 다시 오른쪽으로 옮기기
         if (transform.position.x < -6)
+        {
             transform.localPosition = transform.localPosition + Vector3.right * 24;
+            //GameManager.instance.groundCount++;
+        }
     }
 }

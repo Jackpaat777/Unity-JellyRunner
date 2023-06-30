@@ -20,9 +20,10 @@ public class Player : MonoBehaviour
     public GameObject pressSensor;
     public GameObject giantSensor;
     public GameObject bullet;
-    public float jumpPower;
+    public float jumpPowerUp;
     public SkillType skillType;
 
+    float jumpPower;
     int jumpNum;
     Rigidbody2D rigid;
     Animator anim;
@@ -64,6 +65,7 @@ public class Player : MonoBehaviour
             // double Jump가 안켜져있을 때
             else if (!anim.GetBool("isJump"))
             {
+                jumpPower = 6 + jumpPowerUp;
                 PlayerJump();
             }
         }
@@ -75,13 +77,13 @@ public class Player : MonoBehaviour
             if (bullet.transform.position.x > 17)
                 bullet.SetActive(false);
 
-            // 총알은 회전하며, 오른쪽으로 이동
+            // bullet Move
             Vector3 curPos = bullet.transform.position;
             Vector3 nextPos = Vector3.right * 5 * Time.deltaTime;
             bullet.transform.position = curPos + nextPos;
         }
 
-        // -----------------센서
+        // 센서
         switch (skillType)
         {
             case SkillType.BARRIER:
@@ -133,13 +135,11 @@ public class Player : MonoBehaviour
         skillType = SkillType.BUSTER;
         if (transform.position.y < 0.1f)
             spriteRenderer.sprite = GameManager.instance.sharkSkillSprite;
-        GameManager.instance.speedUp = 5;
     }
     public void BustOff()
     {
         skillType = SkillType.NONE;
         spriteRenderer.sprite = GameManager.instance.jellySpriteList[7];
-        GameManager.instance.speedUp = 0;
     }
 
     void OnCollisionEnter2D(Collision2D collision)

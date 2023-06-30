@@ -25,12 +25,13 @@ public class GameManager : MonoBehaviour
     public string[] skillName;
     public float[] skillDurationList;
     public float[] skillCoolList;
+    public Sprite[] skillSpriteList;
     public Button skillButton;
-    public TextMeshProUGUI skillNameText;
-    public TextMeshProUGUI skillTimeText;
-    public TextMeshProUGUI coolTimeText;
-    float skillTime;
-    float coolTime;
+    public Image skillBackImage;
+    public Slider skillSlider;
+    public GameObject skillSliderArea;
+    float skillTimer;
+    float coolTimer;
     bool onSkill;
     bool onCool;
 
@@ -41,11 +42,13 @@ public class GameManager : MonoBehaviour
     float spawnDelay;
 
     [Header("---------------[InGame]")]
-    public float timer;
     public float speed;
+    public float speedTimer;
+    public float speedLevel;
     public float speedUp;
     public int score;
     public TextMeshProUGUI scoreText;
+    public int groundCount;
     int scoreUp;
     float scoreTimer;
 
@@ -65,16 +68,30 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         scoreUp = 1;
         scoreTimer = 0;
+        speed = 1;
     }
 
     void Update()
     {
-        // Speed for Time
-        timer += Time.deltaTime;
-        // 20초마다 스피드 1증가
-        speed = timer / 20 + 1 + speedUp;
-        if (timer / 20 > 10)
-            speed = 11 + speedUp;
+        // Speed Level
+        // 1. 일정 시간마다 스피드 증가
+        speedTimer += Time.deltaTime;
+        if (speedTimer > 20)
+        {
+            speedLevel += 0.5f;
+            speedTimer = 0;
+        }
+        // 2. 일정거리마다 스피드 증가
+        //if (groundCount > 50)
+        //{
+        //    speedLevel += 0.5f;
+        //    groundCount = 0;
+        //}
+        speed = speedLevel + speedUp;
+
+        // 최대 speed값 제한
+        if (speedLevel > 10)
+            speed = 10 + speedUp;
 
         // Scoring
         scoreTimer += Time.deltaTime;
@@ -96,31 +113,33 @@ public class GameManager : MonoBehaviour
         }
 
         // Skill
-        skillNameText.text = skillName[Variables.jellyTypeNum];
+        skillBackImage.sprite = skillSpriteList[Variables.jellyTypeNum];
+        skillButton.image.sprite = skillBackImage.sprite;
 
         if (onCool)     // 쿨타임 시작
         {
-            coolTime += Time.deltaTime;
-            coolTimeText.gameObject.SetActive(true);
+            OffSlider();
+
+            coolTimer += Time.deltaTime;
+            SkillCoolImage();
 
             // 쿨타임 시간이 지나면
-            if (coolTime > skillCoolList[Variables.jellyTypeNum])
+            if (coolTimer > skillCoolList[Variables.jellyTypeNum])
             {
                 CoolTimeOff();
             }
         }
         else            // 쿨타임 종료
         {
-            coolTimeText.gameObject.SetActive(false);
-
-            if (onSkill)    // 쿨타임이 끝나고 나서 스킬 발동 가능
+            if (onSkill)    // 쿨타임이 끝나면 스킬 발동 가능
             {
-                skillTime += Time.deltaTime;
+                skillTimer += Time.deltaTime;
+                SkillDurationSlider();
                 ExecuteJellySkill();
             }
         }
-        skillTimeText.text = (skillDurationList[Variables.jellyTypeNum] - skillTime).ToString("F1");
-        coolTimeText.text = (skillCoolList[Variables.jellyTypeNum] - coolTime).ToString("F1");
+
+
     }
 
     public void StopSwitch()
@@ -170,6 +189,39 @@ public class GameManager : MonoBehaviour
     {
         onCool = true;
     }
+    void CoolTimeOff()
+    {
+        skillButton.interactable = true;
+        coolTimer = 0;
+        onCool = false;
+    }
+    void SkillDurationSlider()
+    {
+        float skillTime = skillDurationList[Variables.jellyTypeNum];
+
+        if (skillTime == 0)
+            return;
+
+        skillSlider.gameObject.SetActive(true);
+        skillSlider.value = 1 - (skillTimer / skillTime);
+
+        if (skillSlider.value <= 0)
+            skillSliderArea.SetActive(false);
+    }
+    void OffSlider()
+    {
+        skillSlider.gameObject.SetActive(false);
+        skillSliderArea.SetActive(true);
+    }
+    void SkillCoolImage()
+    {
+        float coolTime = skillCoolList[Variables.jellyTypeNum];
+
+        skillButton.image.fillAmount = 1 - (coolTimer / coolTime);
+
+        if (skillButton.image.fillAmount <= 0)
+            skillButton.image.fillAmount = 1;
+    }
     void ExecuteJellySkill()
     {
         switch (Variables.jellyTypeNum)
@@ -214,23 +266,18 @@ public class GameManager : MonoBehaviour
         // 스킬버튼 누르면 쿨타임동안 못누르게
         skillButton.interactable = false;
     }
-    void CoolTimeOff()
-    {
-        skillButton.interactable = true;
-        coolTime = 0;
-        onCool = false;
-    }
     void SpeedUp()
     {
         // 스피드 2 증가
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             speedUp = 2;
         }
         else
         {
             speedUp = 0;
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -238,29 +285,31 @@ public class GameManager : MonoBehaviour
     void JumpUp()
     {
         // 점프 증가
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
-            player.jumpPower = 8;
+            player.jumpPowerUp = 2;
         }
         else
         {
-            player.jumpPower = 6;
-            skillTime = 0;
+            player.jumpPowerUp = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
     }
     void ScoreUp()
     {
-        // 스코어 3배
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        // 스코어 2배
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
-            scoreUp = 3;
+            scoreUp = 2;
         }
         else
         {
             scoreUp = 1;
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -268,14 +317,15 @@ public class GameManager : MonoBehaviour
     void PressDown()
     {
         // 밟기 가능
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             player.skillType = Player.SkillType.PRESS_DOWN;
         }
         else
         {
             player.skillType = Player.SkillType.NONE;
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -283,14 +333,15 @@ public class GameManager : MonoBehaviour
     void Invisibility()
     {
         // 투명화
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             player.AlphaDown();
         }
         else
         {
             player.AlphaUp();
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -298,19 +349,20 @@ public class GameManager : MonoBehaviour
     void GetBarrier()
     {
         player.skillType = Player.SkillType.BARRIER;
-        skillTime = 0;
+        skillTimer = 0;
     }
     void DoubleJump()
     {
         // 더블점프 가능
-        if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             player.skillType = Player.SkillType.DOUBLE_JUMP;
         }
         else
         {
             player.skillType = Player.SkillType.NONE;
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -318,19 +370,22 @@ public class GameManager : MonoBehaviour
     void Buster()
     {
         // 무적 부스트
-        if (skillTime < skillDurationList[Variables.jellyTypeNum] - 1f)
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum] - 1f)
         {
             player.BustOn();
+            speedUp = 5;
         }
-        else if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        else if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             player.BustOff();
+            speedUp = 0;
             player.AlphaDown();
         }
         else
         {
             player.AlphaUp();
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }
@@ -346,7 +401,7 @@ public class GameManager : MonoBehaviour
         // 초밥 발사
         ReRoad();
         player.bullet.SetActive(true);
-        skillTime = 0;
+        skillTimer = 0;
         onSkill = false;
         onCool = true;
     }
@@ -372,18 +427,18 @@ public class GameManager : MonoBehaviour
         spawnTimer = 0;
         spawnDelay = 5;
 
-        skillTime = 0;
+        skillTimer = 0;
         onSkill = false;
         onCool = true;
     }
     void GiantJelly()
     {
         // 무적 거대화
-        if (skillTime < skillDurationList[Variables.jellyTypeNum] - 2f)
+        if (skillTimer < skillDurationList[Variables.jellyTypeNum] - 2f)
         {
             player.GrowUp();
         }
-        else if (skillTime < skillDurationList[Variables.jellyTypeNum])
+        else if (skillTimer < skillDurationList[Variables.jellyTypeNum])
         {
             player.GrowDown();
             player.AlphaDown();
@@ -391,7 +446,8 @@ public class GameManager : MonoBehaviour
         else
         {
             player.AlphaUp();
-            skillTime = 0;
+
+            skillTimer = 0;
             onSkill = false;
             onCool = true;
         }

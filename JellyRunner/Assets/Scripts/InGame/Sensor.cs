@@ -17,7 +17,7 @@ public class Sensor : MonoBehaviour
     public SensorType sensorType;
 
     // 플레이어가 직접 적과 부딫혔을 때 트리거를 키는 것에 대한 문제 (플레이어가 밀림)
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
@@ -29,7 +29,7 @@ public class Sensor : MonoBehaviour
                 collision.gameObject.SetActive(false);
                 // 스킬 종료
                 player.skillType = Player.SkillType.NONE;
-                GameManager.instance.OnSkill();
+                GameManager.instance.OffSkill();
                 GameManager.instance.OnCool();
             }
             // 밟기는 isPressSensor가 켜진 센서에서만 작동
