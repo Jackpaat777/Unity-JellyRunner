@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     public float jumpPowerUp;
     public SkillType skillType;
 
+    bool isJumpButton;  // 점프 버튼 관련 변수
     float jumpPower;
     int jumpNum;
     Rigidbody2D rigid;
@@ -50,7 +51,8 @@ public class Player : MonoBehaviour
             GameManager.instance.OnSkill();
 
         // Jump
-        if (Input.GetButtonDown("Jump") && skillType != SkillType.GIANT && skillType != SkillType.BUSTER)
+        // Input.GetButtonDown("Jump")
+        if (isJumpButton && skillType != SkillType.GIANT && skillType != SkillType.BUSTER)
         {
             // double Jump가 켜져있을 때
             if (skillType == SkillType.DOUBLE_JUMP)
@@ -68,6 +70,7 @@ public class Player : MonoBehaviour
                 jumpPower = 6 + jumpPowerUp;
                 PlayerJump();
             }
+            isJumpButton = false; // 점프한번 하면 버튼 초기화
         }
 
         // Bullet
@@ -107,6 +110,12 @@ public class Player : MonoBehaviour
     {
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         anim.SetBool("isJump", true);
+    }
+
+    public void JumpButton()
+    {
+        isJumpButton = true;
+        Debug.Log("Jump");
     }
 
     // ------------ 스킬 관련 함수들

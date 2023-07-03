@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using TMPro;
+using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.XR;
 using Random = UnityEngine.Random;
 
 // 씬이 이동해도 계속 유지되어야하는 변수들
@@ -25,6 +28,7 @@ public class MainGameManager : MonoBehaviour
     public static MainGameManager instance;
 
     [Header("---------------[Main UI]")]
+    public Jelly[] jellyInMenu;
     public TextMeshProUGUI jelatinText;
     public TextMeshProUGUI goldText;
     public GameObject optionPanel;
@@ -102,6 +106,12 @@ public class MainGameManager : MonoBehaviour
         Variables.isLock[0] = false;
         instance = this;
         Time.timeScale = 1;
+
+        // 불러오기
+        GameLoad();
+
+        // 메인화면씬이 시작되면 젤리 활성화
+        UpdateMainJelly();
     }
 
     void Update()
@@ -114,7 +124,7 @@ public class MainGameManager : MonoBehaviour
         // 카드 돌리기
         if (isRollStart)
         {
-            rollSpeed -= Time.timeScale * 0.008f;
+            rollSpeed -= Time.timeScale * 0.03f;
             cardAc.SetFloat("rollSpeed", rollSpeed);
             // 카드 멈춤
             if (rollSpeed < 1f)
@@ -125,14 +135,24 @@ public class MainGameManager : MonoBehaviour
                 isRollStart = false;
                 NewTextActiveSelf();
             }
-            else if (rollSpeed < 3f)
+            else if (rollSpeed < 2f)
             {
                 cardFront.gameObject.SetActive(false);
             }
-            else if (rollSpeed < 3.5f)
+            else if (rollSpeed < 2.5f)
             {
                 okButton.SetActive(true);
             }
+        }
+    }
+
+    public void UpdateMainJelly()
+    {
+        // 뽑기가 끝나고 나올 때도 업데이트 (Return Button)
+        for (int i = 0; i < 11; i++)
+        {
+            if (!Variables.isLock[i])
+                jellyInMenu[i].gameObject.SetActive(true);
         }
     }
 
@@ -148,10 +168,12 @@ public class MainGameManager : MonoBehaviour
     public void AddJelatin(int jelatinPlus)
     {
         Variables.jelatin += jelatinPlus;
+        GameSave();
     }
     public void AddGold(int jelatinPlus)
     {
         Variables.gold += jelatinPlus;
+        GameSave();
     }
     public void OptionButton()
     {
@@ -440,6 +462,8 @@ public class MainGameManager : MonoBehaviour
         goldRatio.text = "100";
 
         CanExchange();
+
+        GameSave();
     }
     void CanExchange()
     {
@@ -453,7 +477,7 @@ public class MainGameManager : MonoBehaviour
     // 상점 관련 함수
     public void BuyJelly()
     {
-        // 젤리 구매
+        // 골드 감소
         if (Variables.gold >= 1000)
             Variables.gold -= 1000;
         else
@@ -482,7 +506,7 @@ public class MainGameManager : MonoBehaviour
         isRollStart = true;
         clickButton.SetActive(false);
         cardAc.SetBool("isRoll", true);
-        rollSpeed = 4;
+        rollSpeed = 3;
 
         // 카드 뽑기
         int num = Percentage();
@@ -494,6 +518,7 @@ public class MainGameManager : MonoBehaviour
         else
             isNew = false;
         Variables.isLock[num] = false;
+        GameSave();
     }
     public void AgainCard()
     {
@@ -639,6 +664,31 @@ public class MainGameManager : MonoBehaviour
     }
     public void GameExit()
     {
+        GameSave();
         Application.Quit();
+    }
+    public void GameSave()
+    {
+        // 저장값이 변경되는 순간순간 자동 저장
+        // AddJelatin() AddGold() Exchange() StartRollCard() 혹시 모르니까 GameExit()에도
+        PlayerPrefs.SetInt("Jelatin", Variables.jelatin);
+        PlayerPrefs.SetInt("Gold", Variables.gold);
+        for (int i = 0; i < jellySpriteList.Length; i++)
+        {
+            PlayerPrefs.SetInt("isLock" + i, Variables.isLock[i] ? 1 : 0);
+        }
+        PlayerPrefs.Save();
+    }
+    public void GameLoad()
+    {
+        if (!PlayerPrefs.HasKey("Jelatin"))
+            return;
+
+        Variables.jelatin = PlayerPrefs.GetInt("Jelatin");
+        Variables.gold = PlayerPrefs.GetInt("Gold");
+        for (int i = 0; i < jellySpriteList.Length; i++)
+        {
+            Variables.isLock[i] = PlayerPrefs.GetInt("isLock" + i) == 1 ? true : false;
+        }
     }
 }

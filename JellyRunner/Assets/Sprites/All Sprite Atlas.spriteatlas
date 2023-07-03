@@ -1,0 +1,210 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: All Sprite Atlas
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: 350932cf8d63c3749888c39ec9766d78, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 9396d80065b15fb4e9f5fa16deb1841a, type: 3}
+  - {fileID: 21300000, guid: 4e775020695ec184a96d9a6943766fe9, type: 3}
+  - {fileID: 21300000, guid: b2674c202add550489538c0eda41af9b, type: 3}
+  - {fileID: 21300000, guid: 55c38370a8cd6314a8626c513e426605, type: 3}
+  - {fileID: 21300000, guid: feabaf7052f4d8e4daf77e40668bc2b6, type: 3}
+  - {fileID: 21300000, guid: 686af9210bf8e3042a0ce5aae4d44e44, type: 3}
+  - {fileID: 21300000, guid: 590b73e132435194da7d40dc8a3816f0, type: 3}
+  - {fileID: 5986030973748356752, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: -5600206312213581617, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: 3815954189206336483, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: -3690502768834906923, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: -49130668184793455, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: -2330519403281856691, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
+  - {fileID: 21300000, guid: 86542223f2bb0b24b8215df8d82349a9, type: 3}
+  - {fileID: 21300000, guid: 0c0bada3cbd3c2041b3742457d590faf, type: 3}
+  - {fileID: 21300000, guid: d9ee53f3733530547a8518461bfcad64, type: 3}
+  - {fileID: 21300000, guid: 230db3240b492574094d76e3dbd404a1, type: 3}
+  - {fileID: 21300000, guid: 4a4e38441adaaf64c9251018be41c8f6, type: 3}
+  - {fileID: 21300000, guid: 395083545b2376e42bede3fb2a0c8648, type: 3}
+  - {fileID: 21300000, guid: dcfc8a54a5261b4488cae020699f3975, type: 3}
+  - {fileID: 21300000, guid: 0af62a64e233542408bf06d4f69b8be8, type: 3}
+  - {fileID: 21300000, guid: e2174974d22297741b12ce481212f8c3, type: 3}
+  - {fileID: 21300000, guid: fdba80e4e504cdc45af0b7d6389cbb08, type: 3}
+  - {fileID: 21300000, guid: 7fd151f4d9de8de47a1d5abe6e506e83, type: 3}
+  - {fileID: 21300000, guid: 644da3f43c8271947b34e66cb8e8f116, type: 3}
+  - {fileID: 21300000, guid: ce60f325abe16e1408f2d226e825c21a, type: 3}
+  - {fileID: 21300000, guid: fac6985577d19784fabccbe619b500f7, type: 3}
+  - {fileID: 21300000, guid: cc321a55ca74c2341a277b3daafd00e4, type: 3}
+  - {fileID: 21300000, guid: 526edf75fa93d364fbb3eeb1a06a6f47, type: 3}
+  - {fileID: 21300000, guid: 9b4b10262b3633647896ced3dbbc81ea, type: 3}
+  - {fileID: 21300000, guid: 96481b76a6fa9c6428e4e4b1522e9378, type: 3}
+  - {fileID: 21300000, guid: 1403d3a6429ef2e4a9a6e49f3bc9370d, type: 3}
+  - {fileID: 21300000, guid: 18f348779f4feae45a6195ae06cbc32e, type: 3}
+  - {fileID: 21300000, guid: 8e98ed08a7a495140b3a630d08f63baf, type: 3}
+  - {fileID: 21300000, guid: 85fb12385171b8d478e620dfce819508, type: 3}
+  - {fileID: 21300000, guid: f9c7b4486c4012741b4fd24a2092c8eb, type: 3}
+  - {fileID: 21300000, guid: 64678e98cfb9c2a45a4ed1019c6d2941, type: 3}
+  - {fileID: 21300000, guid: 11b75f9856d512244900631455ab3c8d, type: 3}
+  - {fileID: 21300000, guid: 86f68579e1c470645a783c40f4271052, type: 3}
+  - {fileID: 21300000, guid: b6d942a92fcdb3a4ba85635ad37251db, type: 3}
+  - {fileID: 21300000, guid: 0cc98cf945627544e8761d70cbbbb24a, type: 3}
+  - {fileID: 21300000, guid: f899fff9fa9b0754ba9d1f8ac7470df8, type: 3}
+  - {fileID: 21300000, guid: 6d80dc0acb3016c418f31b806ef3c323, type: 3}
+  - {fileID: 21300000, guid: 3649a01a49d94c947820dd1c88eb3975, type: 3}
+  - {fileID: 21300000, guid: 897c542affa1c624da03b90c105313d5, type: 3}
+  - {fileID: 21300000, guid: 55198b2ae35492241a8c6daf23296107, type: 3}
+  - {fileID: 21300000, guid: f6d824ca7a67d8a4bbb07ae37d25907f, type: 3}
+  - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
+  - {fileID: 21300000, guid: 0026732b413aac245ab76b42848e7371, type: 3}
+  - {fileID: 21300000, guid: 744f048bdbcd32d47ada9469c3abfc19, type: 3}
+  - {fileID: 21300000, guid: eb722bfb9a87ea444bc5228fe2440adf, type: 3}
+  - {fileID: 21300000, guid: 2d5a187c329e5f840b248842b9743eb7, type: 3}
+  - {fileID: 21300000, guid: 8e85598c65aa8204f98aac13d6aedf6f, type: 3}
+  - {fileID: 21300000, guid: 3b3113ac17de03a419ca41db7b622eaa, type: 3}
+  - {fileID: 21300000, guid: b73265accab188e409461260602e7e36, type: 3}
+  - {fileID: 21300000, guid: d2d79dbc1ca907b49a98ed6d28711894, type: 3}
+  - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
+  - {fileID: 21300000, guid: 5ef7362dba69d724395b42db08cc7ec2, type: 3}
+  - {fileID: 21300000, guid: 5849ce3db7d288c48b35060e502bd6e0, type: 3}
+  - {fileID: 21300000, guid: 478c737d75951964199a0af4b9320864, type: 3}
+  - {fileID: 21300000, guid: 7405859d9dd86444192e90c1061b61f6, type: 3}
+  - {fileID: 21300000, guid: 14cbb79d17bbcb4488f2f84c10898056, type: 3}
+  - {fileID: 21300000, guid: b8fd21ad16123364aaee0da8f1b3746b, type: 3}
+  - {fileID: 21300000, guid: fe9a600e845b29d448bd73c0c4df6349, type: 3}
+  - {fileID: 21300000, guid: 22fafc3e4b16258438fb4240603b1949, type: 3}
+  - {fileID: 21300000, guid: f4ba7a5e8b25ae241a6c94d4d6df858d, type: 3}
+  - {fileID: 21300000, guid: 35516b8eb72b7f94ca71644372720eab, type: 3}
+  - {fileID: 21300000, guid: a2b1efbe52bb7e8469a0f71be94ca717, type: 3}
+  - {fileID: 21300000, guid: bf2b31ceb6a9bab4d93edffe34b2eae6, type: 3}
+  - {fileID: 21300000, guid: 932ce8ce7b8fd8e4d9fb9bce6a7e0b7d, type: 3}
+  - {fileID: 21300000, guid: 47ec1ede5ab7d234e960dea2dae68186, type: 3}
+  - {fileID: 21300000, guid: 4a44331f2b6c2aa419675d0f938a653f, type: 3}
+  - {fileID: 21300000, guid: 05defd2f4029cc7468710e4579f84edf, type: 3}
+  - {fileID: 21300000, guid: d78e009f5bb799b42bbf3c801af824ac, type: 3}
+  - {fileID: 21300000, guid: 0d3d22bf7ddaadc448522021c59b71b7, type: 3}
+  - {fileID: 21300000, guid: d86daabfc8998ca40a0ed743c78f9226, type: 3}
+  - {fileID: 21300000, guid: 0debfcbf01d3aaa43a426b463c6afd6a, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Medal
+  - Jelly 4 Skill
+  - Room
+  - Ground
+  - Icon 0
+  - Sky
+  - Jelly 2
+  - Explosion 0
+  - Explosion 1
+  - Explosion 2
+  - Explosion 3
+  - Explosion 4
+  - Explosion 5
+  - KJWStudio
+  - Panel Left Over
+  - Cloud A
+  - Jelly 4
+  - Icon 1
+  - Enemy9
+  - Panel Right Over
+  - Jelly 2 Skill
+  - Jelly 10 Skill
+  - CardBack
+  - Jelly 9
+  - Cloud B
+  - Jelly 3
+  - Jelly 7-2
+  - Jelly 9 Skill
+  - Icon 2 Over
+  - UI Btn Down
+  - Jelly 7
+  - Enemy6
+  - Panel
+  - Jelly 6 Skill
+  - Jelly 5 Skill
+  - CardFront_Legend
+  - Panel Right
+  - Panel Left
+  - Icon 4 Over
+  - Enemy7
+  - Icon 3 Over
+  - Enemy10
+  - Jelly 0 Skill
+  - UI Btn On
+  - Shadow
+  - Enemy5
+  - Jelly 1 Skill
+  - Jelly 10
+  - CardFront_Rare
+  - Jelly 3 Skill
+  - Enemy8
+  - App Icon
+  - Panel Under
+  - Enemy0
+  - UI Over
+  - Jelly 7 Skill
+  - Jelly 6
+  - Enemy2
+  - Jelly 8 Skill
+  - Enemy3
+  - Ground
+  - Lock
+  - Jelly 5
+  - Shin
+  - Icon 5 Over
+  - Jelly 0
+  - Sky
+  - Icon Shadow
+  - Panel Border
+  - Jelly 1
+  - Icon 6 Over
+  - Enemy4
+  - CardFront_Normal
+  - Jelly 8
+  - UI Play
+  - Enemy1
+  - CardFront_Special
+  m_RenderDataMap: {}
+  m_Tag: All Sprite Atlas
+  m_IsVariant: 0
