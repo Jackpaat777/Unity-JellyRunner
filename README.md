@@ -11,15 +11,6 @@
 </div>
 <br/><br/>
 
-
-## ⛓ 스프라이트 출처 ⛓
-<p>
-  게임 내에 존재하는 대부분의 스프라이트는 '골드메탈'님의 에셋 팩을 사용하였습니다.<br/><br/>
-  - 볼트 2D 젤리팜 에셋 팩 https://assetstore.unity.com/packages/2d/characters/bolt-2d-jellyfarm-assets-pack-188722<br/>
-  - 볼트 2D 다이노런 에셋 팩 https://assetstore.unity.com/packages/2d/characters/bolt-2d-dinorun-assets-pack-188721
-</p>
-<br/>
-
 ## 🎮 게임방법 🎮
 <p>
 1. 보유중인 젤리를 선택하여 게임을 플레이 합니다.<br/>
@@ -40,5 +31,11 @@
 
 ### 강화
 
-
+## ⛓ 스프라이트 출처 ⛓
+<p>
+  게임 내에 존재하는 대부분의 스프라이트는 '골드메탈'님의 에셋 팩을 사용하였습니다.<br/><br/>
+  - 볼트 2D 젤리팜 에셋 팩 https://assetstore.unity.com/packages/2d/characters/bolt-2d-jellyfarm-assets-pack-188722<br/>
+  - 볼트 2D 다이노런 에셋 팩 https://assetstore.unity.com/packages/2d/characters/bolt-2d-dinorun-assets-pack-188721
+</p>
+<br/>
 
