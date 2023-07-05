@@ -27,6 +27,9 @@ public class MainGameManager : MonoBehaviour
 {
     public static MainGameManager instance;
 
+    [Header("---------------[Audio]")]
+    public AudioManager audioManager;
+
     [Header("---------------[Main UI]")]
     public Jelly[] jellyInMenu;
     public TextMeshProUGUI jelatinText;
@@ -103,6 +106,11 @@ public class MainGameManager : MonoBehaviour
 
     void Awake()
     {
+        // 60프레임
+        Application.targetFrameRate = 60;
+
+        audioManager.BgmPlay("Menu");
+
         Variables.isLock[0] = false;
         instance = this;
         Time.timeScale = 1;
@@ -112,6 +120,7 @@ public class MainGameManager : MonoBehaviour
 
         // 메인화면씬이 시작되면 젤리 활성화
         UpdateMainJelly();
+
     }
 
     void Update()
@@ -134,6 +143,8 @@ public class MainGameManager : MonoBehaviour
                 againButton.SetActive(true);
                 isRollStart = false;
                 NewTextActiveSelf();
+                // Audio
+                audioManager.SfxPlay("Unlock");
             }
             else if (rollSpeed < 2f)
             {
@@ -146,6 +157,7 @@ public class MainGameManager : MonoBehaviour
         }
     }
 
+    // 기타 함수
     public void UpdateMainJelly()
     {
         // 뽑기가 끝나고 나올 때도 업데이트 (Return Button)
@@ -155,8 +167,6 @@ public class MainGameManager : MonoBehaviour
                 jellyInMenu[i].gameObject.SetActive(true);
         }
     }
-
-    // 기타 함수
     public void JelatinButton()
     {
         AddJelatin(1000);
@@ -181,11 +191,13 @@ public class MainGameManager : MonoBehaviour
         {
             Time.timeScale = 0;
             optionPanel.SetActive(true);
+            audioManager.SfxPlay("Pause In");
         }
         else
         {
             Time.timeScale = 1;
             optionPanel.SetActive(false);
+            audioManager.SfxPlay("Pause Out");
         }
     }
 
@@ -198,6 +210,9 @@ public class MainGameManager : MonoBehaviour
         {
             LockCollection(i);
         }
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
     public void OpenCollectionPanel(int selectNum)
     {
@@ -228,6 +243,9 @@ public class MainGameManager : MonoBehaviour
             LockCollectionPanel();
         else
             UnlockCollectionPanel();
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
     public void PageUpInCollection()
     {
@@ -397,8 +415,11 @@ public class MainGameManager : MonoBehaviour
         goldRatioInt = jelainRatioInt / 10;
         jelatinRatio.text = "1000";
         goldRatio.text = "100";
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
-    public void JelatinUp()
+    public void JelatinUpButton()
     {
         // 비율 값 변경
         jelainRatioInt += 100;
@@ -414,8 +435,11 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
-    public void JelatinDown()
+    public void JelatinDownButton()
     {
         // 비율 값 변경
         jelainRatioInt -= 100;
@@ -431,8 +455,11 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
-    public void AllJelatin()
+    public void AllJelatinButton()
     {
         // 기본 젤라틴보다 적은 경우
         if (Variables.jelatin < 1000)
@@ -444,6 +471,9 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
     public void ExchangeButton()
     {
@@ -463,6 +493,10 @@ public class MainGameManager : MonoBehaviour
 
         CanExchange();
 
+        // Audio
+        audioManager.SfxPlay("Buy");
+
+        // Save
         GameSave();
     }
     void CanExchange()
@@ -477,15 +511,19 @@ public class MainGameManager : MonoBehaviour
     // 상점 관련 함수
     public void BuyJelly()
     {
-        // 골드 감소
-        if (Variables.gold >= 1000)
-            Variables.gold -= 1000;
-        else
+        // 골드가 부족하다면
+        if (Variables.gold < 1000)
         {
             unableText.SetActive(true);
+            // Audio
+            audioManager.SfxPlay("Fail");
             return;
         }
 
+
+        // 골드 감소
+        Variables.gold -= 1000;
+        
         // 화면 패널 열기
         buyPanel.SetActive(true);
 
@@ -499,6 +537,9 @@ public class MainGameManager : MonoBehaviour
         againButton.SetActive(false);
         clickButton.SetActive(true);
         cardFront.gameObject.SetActive(true);
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
     public void StartRollCard()
     {
@@ -518,6 +559,11 @@ public class MainGameManager : MonoBehaviour
         else
             isNew = false;
         Variables.isLock[num] = false;
+
+        // Audio
+        audioManager.SfxPlay("Buy");
+
+        // Save
         GameSave();
     }
     public void AgainCard()
@@ -529,16 +575,21 @@ public class MainGameManager : MonoBehaviour
     {
         if (isRollStart)
         {
+            // 카드가 돌고 있으면 카드 멈추기
             rollSpeed = 0;
             cardFront.gameObject.SetActive(false);
             againButton.SetActive(true);
             cardAc.SetBool("isRoll", false);
             isRollStart = false;
             NewTextActiveSelf();
+            //Audio
+            audioManager.SfxPlay("Unlock");
         }
         else
         {
             buyPanel.SetActive(false);
+            // Audio
+            audioManager.SfxPlay("Button");
         }
     }
     int Percentage()
@@ -621,6 +672,9 @@ public class MainGameManager : MonoBehaviour
             LockSelectPanel();
         else
             UnlockSelectPanel();
+
+        // Audio
+        audioManager.SfxPlay("Button");
     }
     public void PageUpInSelect()
     {
@@ -660,10 +714,12 @@ public class MainGameManager : MonoBehaviour
     // 게임작동 관련 함수
     public void GameStart()
     {
+        audioManager.SfxPlay("Button");
         SceneManager.LoadScene(1);
     }
     public void GameExit()
     {
+        audioManager.SfxPlay("Button");
         GameSave();
         Application.Quit();
     }

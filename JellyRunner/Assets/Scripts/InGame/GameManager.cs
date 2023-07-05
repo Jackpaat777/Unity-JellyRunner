@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    [Header("---------------[Audio]")]
+    public AudioManager audioManager;
+
     [Header ("---------------[Jelly]")]
     public Sprite[] jellySpriteList;
     public string[] jellyNameList;
@@ -69,6 +72,8 @@ public class GameManager : MonoBehaviour
         scoreUp = 1;
         scoreTimer = 0;
         speed = 1;
+
+        audioManager.BgmPlay("Game");
     }
 
     void Update()
@@ -160,9 +165,17 @@ public class GameManager : MonoBehaviour
     {
         StopSwitch();
         if (Time.timeScale == 0)
+        {
             optionPanel.SetActive(true);
+            // Audio
+            audioManager.SfxPlay("Pause In");
+        }
         else
+        {
             optionPanel.SetActive(false);
+            // Audio
+            audioManager.SfxPlay("Pause Out");
+        }
     }
     void SpawnEnemy()
     {
@@ -180,6 +193,12 @@ public class GameManager : MonoBehaviour
             return;
 
         onSkill = true;
+
+        // Audio
+        if (Variables.jellyTypeNum == 8)
+            audioManager.SfxPlay("Bullet");
+        else
+            audioManager.SfxPlay("Skill");
     }
     public void OffSkill()
     {
@@ -459,6 +478,9 @@ public class GameManager : MonoBehaviour
 
         explosion.transform.position = pos;
         explosionLogic.StartExplosion();
+        
+        // Audio
+        audioManager.SfxPlay("Explosion");
     }
 
 

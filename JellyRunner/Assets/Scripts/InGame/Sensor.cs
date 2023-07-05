@@ -27,6 +27,8 @@ public class Sensor : MonoBehaviour
                 // Explosion
                 GameManager.instance.CallExplosion(collision.transform.position + Vector3.up * 0.5f);
                 collision.gameObject.SetActive(false);
+                // Audio
+                GameManager.instance.audioManager.SfxPlay("Explosion");
                 // 스킬 종료
                 player.skillType = Player.SkillType.NONE;
                 GameManager.instance.OffSkill();
@@ -39,6 +41,8 @@ public class Sensor : MonoBehaviour
                 // Explosion
                 GameManager.instance.CallExplosion(collision.transform.position + Vector3.up * 0.5f);
                 collision.gameObject.SetActive(false);
+                // Audio
+                GameManager.instance.audioManager.SfxPlay("Explosion");
 
             }
             // 거대화로 적 처치는 isGiantSensor가 켜진 센서에서만 작동
@@ -46,6 +50,8 @@ public class Sensor : MonoBehaviour
             {
                 collision.gameObject.SetActive(false);
                 GameManager.instance.score += 200;
+                // Audio
+                GameManager.instance.audioManager.SfxPlay("Explosion");
             }
             else if (player.skillType == Player.SkillType.INVISIBLE || player.skillType == Player.SkillType.BUSTER)
             {

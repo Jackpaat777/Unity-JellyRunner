@@ -115,7 +115,8 @@ public class Player : MonoBehaviour
     public void JumpButton()
     {
         isJumpButton = true;
-        Debug.Log("Jump");
+        // Audio
+        GameManager.instance.audioManager.SfxPlay("Jump");
     }
 
     // ------------ 스킬 관련 함수들
@@ -164,6 +165,8 @@ public class Player : MonoBehaviour
         {
             // 센서 뚫고 플레이어랑 닿으면 게임 종료
             GameManager.instance.GameOver();
+            // Audio
+            GameManager.instance.audioManager.BgmPlay("Over");
         }
     }
 }
