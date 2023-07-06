@@ -166,9 +166,6 @@ public class Player : MonoBehaviour
         {
             // 센서 뚫고 플레이어랑 닿으면 게임 종료
             GameManager.instance.GameOver();
-            // Audio
-            GameManager.instance.audioManager.SfxPlay("Over");
-            GameManager.instance.audioManager.BgmStop();
         }
     }
 }

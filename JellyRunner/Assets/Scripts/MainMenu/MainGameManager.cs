@@ -21,8 +21,9 @@ public static class Variables
     public static bool[] isLock = { false, true, true, true, true, true, true, true, true, true, true };
     //public static bool[] isLock = { false, false, false, false, false, false, false, false, false, false, false };
     public static int[] skillLevel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    public static float BgmVolume = -20f;
-    public static float SfxVolume = -20f;
+    public static float bgmVolume = -20f;
+    public static float sfxVolume = -20f;
+    public static int highScore = 0;
 }
 
 
@@ -705,6 +706,7 @@ public class MainGameManager : MonoBehaviour
         cardFront.gameObject.SetActive(true);
 
         // Audio
+        audioManager.BgmPlay("Card");
         audioManager.SfxPlay("Button");
     }
     public void StartRollCard()
@@ -755,6 +757,7 @@ public class MainGameManager : MonoBehaviour
         {
             buyPanel.SetActive(false);
             // Audio
+            audioManager.BgmPlay("Menu");
             audioManager.SfxPlay("Button");
         }
     }
@@ -892,8 +895,8 @@ public class MainGameManager : MonoBehaviour
     public void GameSave()
     {
         // 저장값이 변경되는 순간순간 자동 저장
-        // AddJelatin() AddGold() PowerUp() Exchange() StartRollCard() 혹시 모르니까 GameExit()에도
-        // + 오디오 슬라이더 변경해도 자동 저장
+        // AddJelatin() AddGold() PowerUp() Exchange() StartRollCard() 혹시 모르니까 GameExit()에도 +오디오 슬라이더 변경할 때
+        // GameOver() 함수에도 들어감
         PlayerPrefs.SetInt("Jelatin", Variables.jelatin);
         PlayerPrefs.SetInt("Gold", Variables.gold);
         for (int i = 0; i < 11; i++)
@@ -901,8 +904,9 @@ public class MainGameManager : MonoBehaviour
             PlayerPrefs.SetInt("isLock" + i, Variables.isLock[i] ? 1 : 0);
             PlayerPrefs.SetInt("Level" + i, Variables.skillLevel[i]);
         }
-        PlayerPrefs.SetFloat("Bgm", Variables.BgmVolume);
-        PlayerPrefs.SetFloat("Sfx", Variables.SfxVolume);
+        PlayerPrefs.SetFloat("Bgm", Variables.bgmVolume);
+        PlayerPrefs.SetFloat("Sfx", Variables.sfxVolume);
+        PlayerPrefs.SetInt("High", Variables.highScore);
         PlayerPrefs.Save();
     }
     public void GameLoad()
@@ -917,7 +921,8 @@ public class MainGameManager : MonoBehaviour
             Variables.isLock[i] = PlayerPrefs.GetInt("isLock" + i) == 1 ? true : false;
             Variables.skillLevel[i] = PlayerPrefs.GetInt("Level" + i);
         }
-        Variables.BgmVolume = PlayerPrefs.GetFloat("Bgm");
-        Variables.SfxVolume = PlayerPrefs.GetFloat("Sfx");
+        Variables.bgmVolume = PlayerPrefs.GetFloat("Bgm");
+        Variables.sfxVolume = PlayerPrefs.GetFloat("Sfx");
+        Variables.highScore = PlayerPrefs.GetInt("High");
     }
 }

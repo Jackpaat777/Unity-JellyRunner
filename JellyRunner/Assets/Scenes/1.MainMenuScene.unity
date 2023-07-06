@@ -3615,7 +3615,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 37.333332, y: -45}
+  m_AnchoredPosition: {x: 37.333374, y: -45}
   m_SizeDelta: {x: 64.666664, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &161671488
@@ -17877,7 +17877,7 @@ MonoBehaviour:
   bgmClip:
   - {fileID: 8300000, guid: fbd50b6f750f01a42a40ead806f44a8e, type: 3}
   - {fileID: 8300000, guid: 9b2f820bb81c2c643bbaf9d82b3082df, type: 3}
-  - {fileID: 8300000, guid: 24602019784ae1047af60dd331638842, type: 3}
+  - {fileID: 8300000, guid: fd0f7515c90082e48b2ee910adb3b08f, type: 3}
   sfxClip:
   - {fileID: 8300000, guid: 768876ef01ca30043a665d0f8f9a5a29, type: 3}
   - {fileID: 8300000, guid: d419044f4528c924c8246806ad0bfb4b, type: 3}
@@ -17891,6 +17891,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8557afe6616985e4aa1009e1f0e0e5ce, type: 3}
   - {fileID: 8300000, guid: 17f9f4906614cb345884780ba7cef8cd, type: 3}
   - {fileID: 8300000, guid: d39353d33b42d46479abb867a9e77279, type: 3}
+  bgmName: 
 --- !u!1 &1130828652
 GameObject:
   m_ObjectHideFlags: 0
@@ -27583,7 +27584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 128.33333, y: -45}
+  m_AnchoredPosition: {x: 128.33337, y: -45}
   m_SizeDelta: {x: 113.33333, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1708141328

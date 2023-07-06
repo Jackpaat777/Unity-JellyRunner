@@ -15,53 +15,63 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxPlayer;
     public AudioClip[] bgmClip;
     public AudioClip[] sfxClip;
+    public string bgmName;
 
     void Start()
     {
         // 오디오 믹서에 볼륨 값 넣기
-        audioMixer.SetFloat("BGM", Variables.BgmVolume);
-        audioMixer.SetFloat("SFX", Variables.SfxVolume);
+        audioMixer.SetFloat("BGM", Variables.bgmVolume);
+        audioMixer.SetFloat("SFX", Variables.sfxVolume);
 
         // 슬라이더에 볼륨 값 넣기
-        sliderBGM.value = Variables.BgmVolume;
-        sliderSFX.value = Variables.SfxVolume;
+        sliderBGM.value = Variables.bgmVolume;
+        sliderSFX.value = Variables.sfxVolume;
     }
 
     // 슬라이더를 통한 볼륨조절 함수들
     public void BGMControl()
     {
-        Variables.BgmVolume = sliderBGM.value;
+        Variables.bgmVolume = sliderBGM.value;
 
         // 현재 -40을 최소값으로 설정해주었으므로 -40이 되버리면 아예 꺼버림(오디오믹서의 소리 최소값은 -80)
-        if (Variables.BgmVolume == -40f)
+        if (Variables.bgmVolume == -40f)
             audioMixer.SetFloat("BGM", -80);
         else
-            audioMixer.SetFloat("BGM", Variables.BgmVolume);
+            audioMixer.SetFloat("BGM", Variables.bgmVolume);
 
         MainGameManager.instance.GameSave();
     }
 
     public void SFXControl()
     {
-        Variables.SfxVolume = sliderSFX.value;
+        Variables.sfxVolume = sliderSFX.value;
 
-        if (Variables.SfxVolume == -40f)
+        if (Variables.sfxVolume == -40f)
             audioMixer.SetFloat("SFX", -80);
         else
-            audioMixer.SetFloat("SFX", Variables.SfxVolume);
+            audioMixer.SetFloat("SFX", Variables.sfxVolume);
 
         MainGameManager.instance.GameSave();
     }
 
     public void BgmPlay(string type)
     {
+        if (bgmName == type)
+            return;
+
         switch (type)
         {
             case "Menu":
                 bgmPlayer.clip = bgmClip[0];
+                bgmName = "Menu";
                 break;
             case "Game":
                 bgmPlayer.clip = bgmClip[1];
+                bgmName = "Game";
+                break;
+            case "Card":
+                bgmPlayer.clip = bgmClip[2];
+                bgmName = "Card";
                 break;
         }
 

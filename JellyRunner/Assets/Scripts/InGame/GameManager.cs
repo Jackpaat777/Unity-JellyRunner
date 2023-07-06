@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour
     public float speedUp;
     public int score;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI speedText;
+    public TextMeshProUGUI highScoreText;
     public int groundCount;
     int scoreUp;
     float scoreTimer;
@@ -63,6 +65,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI jelatinOver;
     public GameObject optionPanel;
     public GameObject overPanel;
+    public Slider speedSlider;
 
     void Awake()
     {
@@ -76,6 +79,8 @@ public class GameManager : MonoBehaviour
         scoreUp = 1;
         scoreTimer = 0;
         speed = 1;
+        skillSlider.value = 0;
+        speedSlider.value = 1;
 
         audioManager.BgmPlay("Game");
         
@@ -88,24 +93,23 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // Speed Level
-        // 1. 일정 시간마다 스피드 증가
+        // 일정 시간마다 스피드 증가
         speedTimer += Time.deltaTime;
-        if (speedTimer > 20)
+        speedSlider.value = speedTimer / 30;
+        if (speedTimer > 30)
         {
             speedLevel += 0.5f;
+            // 최대값 제한
+            if (speedLevel > 10.5f)
+                speedLevel = 10.5f;
+
+            // Level Text
+            speedText.text = "Lv." + (speedLevel * 2 - 1);
+
             speedTimer = 0;
         }
-        // 2. 일정거리마다 스피드 증가
-        //if (groundCount > 50)
-        //{
-        //    speedLevel += 0.5f;
-        //    groundCount = 0;
-        //}
+        // 최종 speed 값
         speed = speedLevel + speedUp;
-
-        // 최대 speed값 제한
-        if (speedLevel > 10)
-            speed = 10 + speedUp;
 
         // Scoring
         scoreTimer += Time.deltaTime;
@@ -132,8 +136,6 @@ public class GameManager : MonoBehaviour
 
         if (onCool)     // 쿨타임 시작
         {
-            OffSlider();
-
             coolTimer += Time.deltaTime;
             SkillCoolImage();
 
@@ -228,16 +230,7 @@ public class GameManager : MonoBehaviour
         if (skillDurationTime == 0)
             return;
 
-        skillSlider.gameObject.SetActive(true);
         skillSlider.value = 1 - (skillTimer / skillDurationTime);
-
-        if (skillSlider.value <= 0)
-            skillSliderArea.SetActive(false);
-    }
-    void OffSlider()
-    {
-        skillSlider.gameObject.SetActive(false);
-        skillSliderArea.SetActive(true);
     }
     void SkillCoolImage()
     {
@@ -496,6 +489,17 @@ public class GameManager : MonoBehaviour
         MainGameManager.instance.AddJelatin(score);
         StopSwitch();
         overPanel.SetActive(true);
+
+        // High Score Update
+        Variables.highScore = Mathf.Max(Variables.highScore, score);
+        highScoreText.text = "High : " + Variables.highScore.ToString("F0");
+
+        // Audio
+        audioManager.SfxPlay("Over");
+        audioManager.BgmStop();
+
+        // Save
+        MainGameManager.instance.GameSave();
     }
     public void RestartGame()
     {

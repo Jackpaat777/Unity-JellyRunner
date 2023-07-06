@@ -24,10 +24,9 @@ public class Background : MonoBehaviour
     void Scrolling()
     {
         // 화면 밖으로 가면 다시 오른쪽으로 옮기기
-        if (transform.position.x < -6)
+        if (transform.position.x < -3)
         {
-            transform.localPosition = transform.localPosition + Vector3.right * 24;
-            //GameManager.instance.groundCount++;
+            transform.localPosition = transform.localPosition + Vector3.right * 18;
         }
     }
 }
