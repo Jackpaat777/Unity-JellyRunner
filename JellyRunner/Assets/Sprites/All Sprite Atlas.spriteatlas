@@ -57,7 +57,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: feabaf7052f4d8e4daf77e40668bc2b6, type: 3}
   - {fileID: 21300000, guid: 686af9210bf8e3042a0ce5aae4d44e44, type: 3}
   - {fileID: 21300000, guid: 590b73e132435194da7d40dc8a3816f0, type: 3}
-  - {fileID: 21300000, guid: 2d5d6782fc427ad498ff00ded71060f4, type: 3}
   - {fileID: 5986030973748356752, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
   - {fileID: -5600206312213581617, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
   - {fileID: 3815954189206336483, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
@@ -65,8 +64,6 @@ SpriteAtlas:
   - {fileID: -49130668184793455, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
   - {fileID: -2330519403281856691, guid: 54eba9c24be4c474180c23dcccfd6630, type: 3}
   - {fileID: 21300000, guid: 86542223f2bb0b24b8215df8d82349a9, type: 3}
-  - {fileID: 21300000, guid: c0a07333199e4b24c97e30a3cb13b0f9, type: 3}
-  - {fileID: 21300000, guid: b2389643d73d88b4eaa913d4e62e0fbf, type: 3}
   - {fileID: 21300000, guid: 0c0bada3cbd3c2041b3742457d590faf, type: 3}
   - {fileID: 21300000, guid: d9ee53f3733530547a8518461bfcad64, type: 3}
   - {fileID: 21300000, guid: 230db3240b492574094d76e3dbd404a1, type: 3}
@@ -85,7 +82,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 9b4b10262b3633647896ced3dbbc81ea, type: 3}
   - {fileID: 21300000, guid: 96481b76a6fa9c6428e4e4b1522e9378, type: 3}
   - {fileID: 21300000, guid: 1403d3a6429ef2e4a9a6e49f3bc9370d, type: 3}
-  - {fileID: 21300000, guid: e6de1aa65022dda49850e50e51c1fac5, type: 3}
   - {fileID: 21300000, guid: 18f348779f4feae45a6195ae06cbc32e, type: 3}
   - {fileID: 21300000, guid: 8e98ed08a7a495140b3a630d08f63baf, type: 3}
   - {fileID: 21300000, guid: 85fb12385171b8d478e620dfce819508, type: 3}
@@ -100,10 +96,10 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 3649a01a49d94c947820dd1c88eb3975, type: 3}
   - {fileID: 21300000, guid: 897c542affa1c624da03b90c105313d5, type: 3}
   - {fileID: 21300000, guid: 55198b2ae35492241a8c6daf23296107, type: 3}
-  - {fileID: 21300000, guid: 57e6298a8f2a930409c0b2a5c30e9322, type: 3}
   - {fileID: 21300000, guid: f6d824ca7a67d8a4bbb07ae37d25907f, type: 3}
   - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
   - {fileID: 21300000, guid: 0026732b413aac245ab76b42848e7371, type: 3}
+  - {fileID: 21300000, guid: 73c3f17bbee267148a2f224712eecba7, type: 3}
   - {fileID: 21300000, guid: 744f048bdbcd32d47ada9469c3abfc19, type: 3}
   - {fileID: 21300000, guid: eb722bfb9a87ea444bc5228fe2440adf, type: 3}
   - {fileID: 21300000, guid: 2d5a187c329e5f840b248842b9743eb7, type: 3}
@@ -112,7 +108,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b73265accab188e409461260602e7e36, type: 3}
   - {fileID: 21300000, guid: d2d79dbc1ca907b49a98ed6d28711894, type: 3}
   - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
-  - {fileID: 21300000, guid: d9be36cc396603c44ac7365617620b4b, type: 3}
+  - {fileID: 21300000, guid: 56ea801d18819dd4eb62926f1c7c4a15, type: 3}
   - {fileID: 21300000, guid: 5ef7362dba69d724395b42db08cc7ec2, type: 3}
   - {fileID: 21300000, guid: 5849ce3db7d288c48b35060e502bd6e0, type: 3}
   - {fileID: 21300000, guid: 478c737d75951964199a0af4b9320864, type: 3}
@@ -141,7 +137,6 @@ SpriteAtlas:
   - Icon 0
   - Sky
   - Jelly 2
-  - Jelly 6
   - Explosion 0
   - Explosion 1
   - Explosion 2
@@ -149,8 +144,6 @@ SpriteAtlas:
   - Explosion 4
   - Explosion 5
   - KJWStudio
-  - Jelly 8
-  - Jelly 11
   - Panel Left Over
   - Cloud A
   - Jelly 4
@@ -169,7 +162,6 @@ SpriteAtlas:
   - UI Btn Down
   - Jelly 7
   - Enemy6
-  - Jelly 7
   - Panel
   - Jelly 6 Skill
   - Jelly 5 Skill
@@ -184,10 +176,10 @@ SpriteAtlas:
   - UI Btn On
   - Shadow
   - Enemy5
-  - Jelly 9
   - Jelly 1 Skill
   - Jelly 10
   - CardFront_Rare
+  - Back A
   - Jelly 3 Skill
   - Enemy8
   - App Icon
@@ -196,7 +188,7 @@ SpriteAtlas:
   - UI Over
   - Jelly 7 Skill
   - Jelly 6
-  - Jelly 10
+  - Back B
   - Enemy2
   - Jelly 8 Skill
   - Enemy3

@@ -18,36 +18,39 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        // 씬이 시작될 때 슬라이더의 위치는 현재 볼륨과 동일하게 설정 >> (인게임 -> 메인화면 / 메인화면 -> 인게임) 씬 전환 시 슬라이더 초기위치 조정
-        // slider의 위치를 지정해줄 변수
-        float  valueBGM, valueSFX;
-        // 오디오 믹서의 현재 값을 value에 저장함 (value가 존재하지 않는 경우 false를 반환함)
-        bool resultBGM = audioMixer.GetFloat("BGM", out valueBGM);
-        bool resultSFX = audioMixer.GetFloat("SFX", out valueSFX);
+        // 오디오 믹서에 볼륨 값 넣기
+        audioMixer.SetFloat("BGM", Variables.BgmVolume);
+        audioMixer.SetFloat("SFX", Variables.SfxVolume);
 
-        // slider의 위치 변환
-        if (resultBGM)
-            sliderBGM.value = valueBGM;
-        if (resultSFX)
-            sliderSFX.value = valueSFX;
+        // 슬라이더에 볼륨 값 넣기
+        sliderBGM.value = Variables.BgmVolume;
+        sliderSFX.value = Variables.SfxVolume;
     }
 
     // 슬라이더를 통한 볼륨조절 함수들
     public void BGMControl()
     {
-        float sound = sliderBGM.value;
+        Variables.BgmVolume = sliderBGM.value;
 
         // 현재 -40을 최소값으로 설정해주었으므로 -40이 되버리면 아예 꺼버림(오디오믹서의 소리 최소값은 -80)
-        if (sound == -40f) audioMixer.SetFloat("BGM", -80);
-        else audioMixer.SetFloat("BGM", sound);
+        if (Variables.BgmVolume == -40f)
+            audioMixer.SetFloat("BGM", -80);
+        else
+            audioMixer.SetFloat("BGM", Variables.BgmVolume);
+
+        MainGameManager.instance.GameSave();
     }
 
     public void SFXControl()
     {
-        float sound = sliderSFX.value;
+        Variables.SfxVolume = sliderSFX.value;
 
-        if (sound == -40f) audioMixer.SetFloat("SFX", -80);
-        else audioMixer.SetFloat("SFX", sound);
+        if (Variables.SfxVolume == -40f)
+            audioMixer.SetFloat("SFX", -80);
+        else
+            audioMixer.SetFloat("SFX", Variables.SfxVolume);
+
+        MainGameManager.instance.GameSave();
     }
 
     public void BgmPlay(string type)
@@ -56,20 +59,18 @@ public class AudioManager : MonoBehaviour
         {
             case "Menu":
                 bgmPlayer.clip = bgmClip[0];
-                Debug.Log(type);
                 break;
             case "Game":
                 bgmPlayer.clip = bgmClip[1];
-                Debug.Log(type);
-                break;
-            case "Over":
-                bgmPlayer.clip = bgmClip[2];
-                Debug.Log(type);
                 break;
         }
 
         bgmPlayer.Play();
-        Debug.Log("Play");
+    }
+
+    public void BgmStop()
+    {
+        bgmPlayer.Stop();
     }
 
     public void SfxPlay(string type)
@@ -97,17 +98,23 @@ public class AudioManager : MonoBehaviour
             case "Jump":
                 sfxPlayer.clip = sfxClip[6];
                 break;
-            case "Skill":
+            case "Land":
                 sfxPlayer.clip = sfxClip[7];
                 break;
-            case "Bullet":
+            case "Skill":
                 sfxPlayer.clip = sfxClip[8];
                 break;
-            case "Explosion":
+            case "Bullet":
                 sfxPlayer.clip = sfxClip[9];
+                break;
+            case "Explosion":
+                sfxPlayer.clip = sfxClip[10];
+                break;
+            case "Over":
+                sfxPlayer.clip = sfxClip[11];
                 break;
         }
 
-        sfxPlayer.Play();
+        sfxPlayer.PlayOneShot(sfxPlayer.clip);
     }
 }

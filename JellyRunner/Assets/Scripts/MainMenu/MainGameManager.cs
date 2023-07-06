@@ -20,6 +20,9 @@ public static class Variables
     public static int jellyTypeNum = 0;
     public static bool[] isLock = { false, true, true, true, true, true, true, true, true, true, true };
     //public static bool[] isLock = { false, false, false, false, false, false, false, false, false, false, false };
+    public static int[] skillLevel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    public static float BgmVolume = -20f;
+    public static float SfxVolume = -20f;
 }
 
 
@@ -31,7 +34,7 @@ public class MainGameManager : MonoBehaviour
     public AudioManager audioManager;
 
     [Header("---------------[Main UI]")]
-    public Jelly[] jellyInMenu;
+    public GameObject[] jellyInMenu;
     public TextMeshProUGUI jelatinText;
     public TextMeshProUGUI goldText;
     public GameObject optionPanel;
@@ -40,7 +43,9 @@ public class MainGameManager : MonoBehaviour
     public string[] jellyNameList;
     public string[] skillNameList;
     public float[] skillDurationList;
+    public float[] skillDurationUpList;
     public float[] skillCoolList;
+    public float[] skillCoolDownList;
     public Sprite[] jellySpriteList;
     public Sprite[] skillSpriteList;
 
@@ -61,6 +66,23 @@ public class MainGameManager : MonoBehaviour
     public TextMeshProUGUI jellySkillDuration;
     public TextMeshProUGUI jellySkillCool;
     public TextMeshProUGUI jellySkillDetail;
+    public TextMeshProUGUI jellySkillLevel;
+
+    [Header("---------------[Power Up]")]
+    public int[] powerJelatinList;
+    public GameObject[] jellyInPower;
+    public GameObject powerPanel;
+    public GameObject powerSelectPanel;
+    public TextMeshProUGUI requestingjelatinTextInPower;
+    public TextMeshProUGUI havingJelatinTextInPower;
+    public Image jellyImageInPower;
+    public Button powerUpButton;
+    public TextMeshProUGUI skillDurationDown;
+    public TextMeshProUGUI skillDurationUp;
+    public TextMeshProUGUI skillCoolDown;
+    public TextMeshProUGUI skillCoolUp;
+    public TextMeshProUGUI levelTextInPower;
+    int idx;
 
     [Header("---------------[Exchange]")]
     public GameObject exchangePanel;
@@ -109,10 +131,9 @@ public class MainGameManager : MonoBehaviour
         // 60프레임
         Application.targetFrameRate = 60;
 
-        audioManager.BgmPlay("Menu");
-
+        if (instance == null)
+            instance = this;
         Variables.isLock[0] = false;
-        instance = this;
         Time.timeScale = 1;
 
         // 불러오기
@@ -121,6 +142,7 @@ public class MainGameManager : MonoBehaviour
         // 메인화면씬이 시작되면 젤리 활성화
         UpdateMainJelly();
 
+        audioManager.BgmPlay("Menu");
     }
 
     void Update()
@@ -128,6 +150,7 @@ public class MainGameManager : MonoBehaviour
         // 보유 젤라틴, 골드 텍스트 실시간 업데이트
         jelatinText.text = Variables.jelatin.ToString("N0");
         goldText.text = Variables.gold.ToString("N0");
+        havingJelatinTextInPower.text = Variables.jelatin.ToString("N0");
         storeGoldText.text = Variables.gold.ToString("N0");
 
         // 카드 돌리기
@@ -164,7 +187,7 @@ public class MainGameManager : MonoBehaviour
         for (int i = 0; i < 11; i++)
         {
             if (!Variables.isLock[i])
-                jellyInMenu[i].gameObject.SetActive(true);
+                jellyInMenu[i].SetActive(true);
         }
     }
     public void JelatinButton()
@@ -231,10 +254,14 @@ public class MainGameManager : MonoBehaviour
         // 스킬이름
         jellySkillName.text = skillNameList[collectionPageNum];
         // 스킬 지속시간, 쿨타임
-        jellySkillDuration.text = skillDurationList[collectionPageNum].ToString();
-        jellySkillCool.text = skillCoolList[collectionPageNum].ToString();
+        float durNow = skillDurationList[collectionPageNum] + (Variables.skillLevel[collectionPageNum] * skillDurationUpList[collectionPageNum]);
+        float coolNow = skillCoolList[collectionPageNum] - (Variables.skillLevel[collectionPageNum] * skillCoolDownList[collectionPageNum]);
+        jellySkillDuration.text = durNow.ToString("F1");
+        jellySkillCool.text = coolNow.ToString("F1");
         // 스킬 이미지
         skillImageInCollection.sprite = skillSpriteList[collectionPageNum];
+        // 스킬 레벨
+        jellySkillLevel.text = "Lv." + (Variables.skillLevel[collectionPageNum] + 1);
         // 스킬 내용
         jellySkillDetail.text = SkillText(collectionPageNum);
 
@@ -312,28 +339,28 @@ public class MainGameManager : MonoBehaviour
         switch (type)
         {
             case 0:
-                typeText = "3초동안 스피드가 증가합니다.";
+                typeText = "지속시간동안 스피드가 증가합니다.";
                 break;
             case 1:
-                typeText = "8초동안 점프력이 증가합니다.";
+                typeText = "지속시간동안 점프력이 증가합니다.";
                 break;
             case 2:
-                typeText = "5초동안 점수가 2배 증가합니다.";
+                typeText = "지속시간동안 점수가 2배 증가합니다.";
                 break;
             case 3:
-                typeText = "15초동안 적을 밟을 수 있습니다.";
+                typeText = "지속시간동안 적을 밟을 수 있습니다.";
                 break;
             case 4:
-                typeText = "8초간 투명화되어 적들을 무시할 수 있습니다.";
+                typeText = "지속시간간 투명화되어 적들을 무시할 수 있습니다.";
                 break;
             case 5:
                 typeText = "한번의 공격을 무시하는 베리어를 생성합니다.\n(베리어가 파괴되면 쿨타임 시작)";
                 break;
             case 6:
-                typeText = "10초동안 연속으로 두번까지 점프가 가능합니다.";
+                typeText = "지속시간동안 연속으로 두번까지 점프가 가능합니다.";
                 break;
             case 7:
-                typeText = "부스터를 사용하여 6초동안 적들을 무시하고 스피드가 크게 증가합니다.\n(점프불가)";
+                typeText = "부스터를 사용하여 지속시간동안 적들을 무시하고 스피드가 크게 증가합니다.\n(점프불가)";
                 break;
             case 8:
                 typeText = "초밥을 발사하고 적을 처치하면 초밥의 크기가 커지며 크기에 비례하여 추가점수를 획득합니다.\n" +
@@ -344,7 +371,7 @@ public class MainGameManager : MonoBehaviour
                                             "추가로 3초동안 적이 생성되지 않습니다.";
                 break;
             case 10:
-                typeText = "10초동안 몸집을 키운 뒤 적을 먹어치웁니다. 적을 처치할 때마다 점수가 200씩 증가합니다.\n(점프불가)";
+                typeText = "지속시간동안 몸집을 키운 뒤 적을 먹어치웁니다. 적을 처치할 때마다 점수가 200씩 증가합니다.\n(점프불가)";
                 break;
         }
 
@@ -377,8 +404,9 @@ public class MainGameManager : MonoBehaviour
         jellySkillName.gameObject.SetActive(false);
         // 젤리 정보 비활성화
         jellyDetailText.text = "보유하지 않은 젤리입니다.";
-        // 스킬 이미지, 지속시간, 쿨타임, 스킬 내용 잠금
+        // 스킬 이미지, 레벨, 지속시간, 쿨타임, 스킬 내용 잠금
         skillImageInCollection.gameObject.SetActive(false);
+        jellySkillLevel.gameObject.SetActive(false);
         jellySkillDuration.text = "-";
         jellySkillCool.text = "-";
         jellySkillDetail.gameObject.SetActive(false);
@@ -397,7 +425,147 @@ public class MainGameManager : MonoBehaviour
         jellySkillName.gameObject.SetActive(true);
 
         skillImageInCollection.gameObject.SetActive(true);
+        jellySkillLevel.gameObject.SetActive(true);
         jellySkillDetail.gameObject.SetActive(true);
+    }
+
+    // 강화 관련 함수
+    public void OpenPowerUp()
+    {
+        powerPanel.SetActive(true);
+
+        // 값 초기화
+        // Sprite Black
+        jellyImageInPower.sprite = jellySpriteList[0];
+        jellyImageInPower.color = Color.black;
+        jellyImageInPower.SetNativeSize();
+
+        // 레벨 텍스트
+        levelTextInPower.text = "Click!";
+
+        // 텍스트 잠그기
+        requestingjelatinTextInPower.text = "-";
+        skillDurationDown.text = "-";
+        skillDurationUp.text = "-";
+        skillCoolDown.text = "-";
+        skillCoolUp.text = "-";
+
+        // Button
+        powerUpButton.interactable = false;
+
+        // Audio
+        audioManager.SfxPlay("Button");
+    }
+    public void OpenPowerPanel()
+    {
+        powerSelectPanel.SetActive(true);
+
+        // 잠겨있지 않은 젤리들만 보이도록
+        for (int i = 0; i < jellySpriteList.Length;i++)
+        {
+            if (!Variables.isLock[i])
+                jellyInPower[i].SetActive(true);
+        }
+
+        // AudiojellyImageInPower
+        audioManager.SfxPlay("Button");
+    }
+    public void SelectJellyInPower(int typeNum)
+    {
+        // 젤리넘버 인덱스 값 저장
+        idx = typeNum;
+
+        // Panel Off
+        powerSelectPanel.SetActive(false);
+
+        // 선택된 젤리 정보 가져오기
+        // Sprite
+        jellyImageInPower.sprite = jellySpriteList[idx];
+        jellyImageInPower.color = Color.white;
+        jellyImageInPower.SetNativeSize();
+
+        // Level (실제 값보다 1높게 보이도록)
+        levelTextInPower.text = "Lv." + (Variables.skillLevel[idx] + 1);
+
+        // Text
+        // 현재 지속시간, 쿨타임 값 / 다음 지속시간, 쿨타임 값 가져오기
+        float durationUpdate = skillDurationList[idx] + (Variables.skillLevel[idx] * skillDurationUpList[idx]);
+        float durationNext = skillDurationList[idx] + ((Variables.skillLevel[idx] + 1) * skillDurationUpList[idx]);
+        float coolUpdate = skillCoolList[idx] - (Variables.skillLevel[idx] * skillCoolDownList[idx]);
+        float coolNext = skillCoolList[idx] - ((Variables.skillLevel[idx] + 1) * skillCoolDownList[idx]);
+
+        if (Variables.skillLevel[idx] == 9)
+        {
+            // Skill Duration
+            skillDurationDown.text = durationUpdate.ToString("F1");
+            skillDurationUp.text = "-";
+
+            // Skill Cool
+            skillCoolDown.text = coolUpdate.ToString("F1");
+            skillCoolUp.text = "-";
+
+            // Jelatin
+            requestingjelatinTextInPower.text = "-";
+        }
+        else
+        {
+            // Skill Duration
+            if (idx == 5 || idx == 8 || idx == 9)
+            {
+                // 젤리 인덱스가 5,8,9번은 지속시간이 없는 스킬임
+                skillDurationDown.text = "-";
+                skillDurationUp.text = "-";
+            }
+            else
+            {
+                skillDurationDown.text = durationUpdate.ToString("F1");
+                skillDurationUp.text = durationNext.ToString("F1");
+            }
+
+            // Skill Cool
+            skillCoolDown.text = coolUpdate.ToString("F1");
+            skillCoolUp.text = coolNext.ToString("F1");
+
+            // Jelatin
+            requestingjelatinTextInPower.text = powerJelatinList[Variables.skillLevel[idx]].ToString();
+        }
+
+        // Button
+        CanPowerUp();
+
+        // Audio
+        audioManager.SfxPlay("Button");
+    }
+    public void PowerUpButton()
+    {
+        // 젤라틴 감소
+        Variables.jelatin -= powerJelatinList[Variables.skillLevel[idx]];
+
+        // idx의 젤리 스킬레벨 증가
+        Variables.skillLevel[idx]++;
+
+        // 버튼을 누른 뒤에도 파워업이 가능한지
+        CanPowerUp();
+        // 다음 스텝 (텍스트 바꾸기) 오디오 포함
+        SelectJellyInPower(idx);
+
+        // Save
+        GameSave();
+    }
+    void CanPowerUp()
+    {
+        // 레벨이 9인 경우
+        if (Variables.skillLevel[idx] == 9)
+        {
+            powerUpButton.interactable = false;
+            return;
+        }
+
+        // 보유한 젤라틴이 요구되는 젤라틴보다 부족할 경우
+        if (Variables.jelatin < powerJelatinList[Variables.skillLevel[idx]])
+            powerUpButton.interactable = false;
+        else
+            powerUpButton.interactable = true;
     }
 
     // 환전소 관련 함수
@@ -435,9 +603,6 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
-
-        // Audio
-        audioManager.SfxPlay("Button");
     }
     public void JelatinDownButton()
     {
@@ -455,9 +620,6 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
-
-        // Audio
-        audioManager.SfxPlay("Button");
     }
     public void AllJelatinButton()
     {
@@ -471,9 +633,6 @@ public class MainGameManager : MonoBehaviour
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
         goldRatio.text = goldRatioInt.ToString();
-
-        // Audio
-        audioManager.SfxPlay("Button");
     }
     public void ExchangeButton()
     {
@@ -501,6 +660,13 @@ public class MainGameManager : MonoBehaviour
     }
     void CanExchange()
     {
+        // 보유 젤라틴이 0보다 적으면
+        if (Variables.jelatin <= 0)
+        {
+            exchangeButton.interactable = false;
+            return;
+        }
+
         // 환전이 가능한지
         if (jelainRatioInt > Variables.jelatin)
             exchangeButton.interactable = false;
@@ -715,7 +881,7 @@ public class MainGameManager : MonoBehaviour
     public void GameStart()
     {
         audioManager.SfxPlay("Button");
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("2.InGameScene");
     }
     public void GameExit()
     {
@@ -726,13 +892,17 @@ public class MainGameManager : MonoBehaviour
     public void GameSave()
     {
         // 저장값이 변경되는 순간순간 자동 저장
-        // AddJelatin() AddGold() Exchange() StartRollCard() 혹시 모르니까 GameExit()에도
+        // AddJelatin() AddGold() PowerUp() Exchange() StartRollCard() 혹시 모르니까 GameExit()에도
+        // + 오디오 슬라이더 변경해도 자동 저장
         PlayerPrefs.SetInt("Jelatin", Variables.jelatin);
         PlayerPrefs.SetInt("Gold", Variables.gold);
-        for (int i = 0; i < jellySpriteList.Length; i++)
+        for (int i = 0; i < 11; i++)
         {
             PlayerPrefs.SetInt("isLock" + i, Variables.isLock[i] ? 1 : 0);
+            PlayerPrefs.SetInt("Level" + i, Variables.skillLevel[i]);
         }
+        PlayerPrefs.SetFloat("Bgm", Variables.BgmVolume);
+        PlayerPrefs.SetFloat("Sfx", Variables.SfxVolume);
         PlayerPrefs.Save();
     }
     public void GameLoad()
@@ -742,9 +912,12 @@ public class MainGameManager : MonoBehaviour
 
         Variables.jelatin = PlayerPrefs.GetInt("Jelatin");
         Variables.gold = PlayerPrefs.GetInt("Gold");
-        for (int i = 0; i < jellySpriteList.Length; i++)
+        for (int i = 0; i < 11; i++)
         {
             Variables.isLock[i] = PlayerPrefs.GetInt("isLock" + i) == 1 ? true : false;
+            Variables.skillLevel[i] = PlayerPrefs.GetInt("Level" + i);
         }
+        Variables.BgmVolume = PlayerPrefs.GetFloat("Bgm");
+        Variables.SfxVolume = PlayerPrefs.GetFloat("Sfx");
     }
 }

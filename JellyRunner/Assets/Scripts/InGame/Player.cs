@@ -110,13 +110,13 @@ public class Player : MonoBehaviour
     {
         rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         anim.SetBool("isJump", true);
+        // Audio
+        GameManager.instance.audioManager.SfxPlay("Jump");
     }
 
     public void JumpButton()
     {
         isJumpButton = true;
-        // Audio
-        GameManager.instance.audioManager.SfxPlay("Jump");
     }
 
     // ------------ 스킬 관련 함수들
@@ -159,6 +159,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isJump", false);
             jumpNum = 0; // 더블점프용 변수
+            GameManager.instance.audioManager.SfxPlay("Land");
         }
 
         if (collision.gameObject.tag == "Enemy")
@@ -166,7 +167,8 @@ public class Player : MonoBehaviour
             // 센서 뚫고 플레이어랑 닿으면 게임 종료
             GameManager.instance.GameOver();
             // Audio
-            GameManager.instance.audioManager.BgmPlay("Over");
+            GameManager.instance.audioManager.SfxPlay("Over");
+            GameManager.instance.audioManager.BgmStop();
         }
     }
 }
