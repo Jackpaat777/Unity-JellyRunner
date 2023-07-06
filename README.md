@@ -28,8 +28,12 @@
 ## 🎬 데모영상 🎬
 
 ### 로비
+<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/7343cd99-df96-43ab-aeed-8717dfd9c56b" controls style="max-width: 600px;">
+</video>
 
 ### 인게임
+<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/7f751157-267a-4362-a7d8-ba0c555e291c" controls style="max-width: 600px;">
+</video>
 
 <br/><br/>
 
