@@ -941,6 +941,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1406815060}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: SfxPlay
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Button
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &177955346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1225,7 +1237,7 @@ GameObject:
   - component: {fileID: 324978939}
   - component: {fileID: 324978938}
   m_Layer: 5
-  m_Name: Level Text
+  m_Name: Stage Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1248,7 +1260,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 7, y: 8}
+  m_AnchoredPosition: {x: 3, y: 8}
   m_SizeDelta: {x: 27, y: 10}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &324978938
@@ -1271,7 +1283,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Lv.1
+  m_text: Stage 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8362a9b58009fd84e934a019e9a748ab, type: 2}
   m_sharedMaterial: {fileID: -3305441000404381003, guid: 8362a9b58009fd84e934a019e9a748ab, type: 2}
@@ -2712,18 +2724,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 7fd151f4d9de8de47a1d5abe6e506e83, type: 3}
   - {fileID: 21300000, guid: 764f930ba03e6324d805335eb66b8c98, type: 3}
   - {fileID: 21300000, guid: fac6985577d19784fabccbe619b500f7, type: 3}
-  jellyNameList:
-  - "\uC2AC\uB77C\uC784"
-  - "\uC824\uB9AC\uBE48"
-  - "\uD3EC\uB3C4"
-  - "\uACF0\uB3CC\uC774"
-  - "\uD478\uB529"
-  - "\uC591\uAC31"
-  - "\uAFC8\uD2C0\uC774"
-  - "\uC0C1\uC5B4"
-  - "\uCD08\uBC25"
-  - "\uB85C\uC584"
-  - "\uC9C0\uAD6C"
   skillSpriteList:
   - {fileID: 21300000, guid: 6d80dc0acb3016c418f31b806ef3c323, type: 3}
   - {fileID: 21300000, guid: f6d824ca7a67d8a4bbb07ae37d25907f, type: 3}
@@ -2736,18 +2736,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5849ce3db7d288c48b35060e502bd6e0, type: 3}
   - {fileID: 21300000, guid: cc321a55ca74c2341a277b3daafd00e4, type: 3}
   - {fileID: 21300000, guid: e2174974d22297741b12ce481212f8c3, type: 3}
-  skillNameList:
-  - "\uC18D\uB3C4\uC99D\uAC00"
-  - "\uC810\uD504\uAC15\uD654"
-  - "\uC810\uC218\uC99D\uAC00"
-  - "\uBC1F\uAE30\uAC00\uB2A5"
-  - "\uD22C\uBA85\uD654"
-  - "\uBCA0\uB9AC\uC5B4"
-  - "\uB354\uBE14\uC810\uD504"
-  - "\uBD80\uC2A4\uD130"
-  - "\uCD08\uBC25\uBC1C\uC0AC"
-  - "\uC62C \uD0AC"
-  - "\uAC70\uB300\uD654"
   skillDurationList:
   - 3
   - 5
@@ -4280,6 +4268,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1406815060}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: SfxPlay
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Button
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &1009673105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5164,7 +5164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+  m_Color: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5696,6 +5696,7 @@ MonoBehaviour:
   bgmPlayer: {fileID: 1407654991}
   sfxPlayer: {fileID: 1416289234}
   bgmClip:
+  - {fileID: 8300000, guid: e62ed1d0c345ea747ab9736e0ee10121, type: 3}
   - {fileID: 8300000, guid: fbd50b6f750f01a42a40ead806f44a8e, type: 3}
   - {fileID: 8300000, guid: 9b2f820bb81c2c643bbaf9d82b3082df, type: 3}
   - {fileID: 8300000, guid: fd0f7515c90082e48b2ee910adb3b08f, type: 3}
@@ -9027,11 +9028,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbb5342ad6ba57041a115026c683f0d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jumpPowerUp: 0
   barrierSensor: {fileID: 1690557932}
   pressSensor: {fileID: 1582915521}
   giantSensor: {fileID: 1442847165}
   bullet: {fileID: 1643325516}
-  jumpPowerUp: 0
   skillType: 0
 --- !u!212 &1947616465
 SpriteRenderer:

@@ -39,7 +39,7 @@ public class AudioManager : MonoBehaviour
         else
             audioMixer.SetFloat("BGM", Variables.bgmVolume);
 
-        MainGameManager.instance.GameSave();
+        VolumeSave();
     }
     public void SFXControl()
     {
@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
         else
             audioMixer.SetFloat("SFX", Variables.sfxVolume);
 
-        MainGameManager.instance.GameSave();
+        VolumeSave();
     }
 
     public void BgmPlay(string type)
@@ -60,16 +60,20 @@ public class AudioManager : MonoBehaviour
 
         switch (type)
         {
-            case "Menu":
+            case "Title":
                 bgmPlayer.clip = bgmClip[0];
                 bgmName = "Menu";
                 break;
-            case "Game":
+            case "Menu":
                 bgmPlayer.clip = bgmClip[1];
+                bgmName = "Menu";
+                break;
+            case "Game":
+                bgmPlayer.clip = bgmClip[2];
                 bgmName = "Game";
                 break;
             case "Card":
-                bgmPlayer.clip = bgmClip[2];
+                bgmPlayer.clip = bgmClip[3];
                 bgmName = "Card";
                 break;
         }
@@ -123,5 +127,11 @@ public class AudioManager : MonoBehaviour
         }
 
         sfxPlayer.PlayOneShot(sfxPlayer.clip);
+    }
+
+    void VolumeSave()
+    {
+        PlayerPrefs.SetFloat("Bgm", Variables.bgmVolume);
+        PlayerPrefs.SetFloat("Sfx", Variables.sfxVolume);
     }
 }

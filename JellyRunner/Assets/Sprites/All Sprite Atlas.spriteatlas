@@ -109,18 +109,22 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d2d79dbc1ca907b49a98ed6d28711894, type: 3}
   - {fileID: 21300000, guid: 6de610ccbbc0a094b804153e2dea43a6, type: 3}
   - {fileID: 21300000, guid: 56ea801d18819dd4eb62926f1c7c4a15, type: 3}
+  - {fileID: 21300000, guid: 2c30671d0b9362b48936b71864fb9ab2, type: 3}
   - {fileID: 21300000, guid: 5ef7362dba69d724395b42db08cc7ec2, type: 3}
   - {fileID: 21300000, guid: 5849ce3db7d288c48b35060e502bd6e0, type: 3}
   - {fileID: 21300000, guid: 478c737d75951964199a0af4b9320864, type: 3}
   - {fileID: 21300000, guid: 7405859d9dd86444192e90c1061b61f6, type: 3}
   - {fileID: 21300000, guid: 14cbb79d17bbcb4488f2f84c10898056, type: 3}
   - {fileID: 21300000, guid: b8fd21ad16123364aaee0da8f1b3746b, type: 3}
+  - {fileID: 21300000, guid: a06285cdb08b17540824882002d23c47, type: 3}
   - {fileID: 21300000, guid: fe9a600e845b29d448bd73c0c4df6349, type: 3}
   - {fileID: 21300000, guid: 22fafc3e4b16258438fb4240603b1949, type: 3}
   - {fileID: 21300000, guid: f4ba7a5e8b25ae241a6c94d4d6df858d, type: 3}
   - {fileID: 21300000, guid: 35516b8eb72b7f94ca71644372720eab, type: 3}
+  - {fileID: 21300000, guid: fba3eebe48a3dbb4f9992e774e7cda2a, type: 3}
   - {fileID: 21300000, guid: a2b1efbe52bb7e8469a0f71be94ca717, type: 3}
   - {fileID: 21300000, guid: bf2b31ceb6a9bab4d93edffe34b2eae6, type: 3}
+  - {fileID: 21300000, guid: c1da15ce3397f3e4ca2e88743fd84ed1, type: 3}
   - {fileID: 21300000, guid: 932ce8ce7b8fd8e4d9fb9bce6a7e0b7d, type: 3}
   - {fileID: 21300000, guid: 47ec1ede5ab7d234e960dea2dae68186, type: 3}
   - {fileID: 21300000, guid: 4a44331f2b6c2aa419675d0f938a653f, type: 3}
@@ -189,18 +193,22 @@ SpriteAtlas:
   - Jelly 7 Skill
   - Jelly 6
   - Back B
+  - UI Out Btn On
   - Enemy2
   - Jelly 8 Skill
   - Enemy3
   - Ground
   - Lock
   - Jelly 5
+  - Title
   - Shin
   - Icon 5 Over
   - Jelly 0
   - Sky
+  - UI Out Btn Down
   - Icon Shadow
   - Panel Border
+  - Background
   - Jelly 1
   - Icon 6 Over
   - Enemy4

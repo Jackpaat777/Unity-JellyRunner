@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     float scoreTimer;
     int scoreUp;
     bool isOver;
+    bool isOption;
 
     [Header ("---------------[Information]")]
     public Sprite[] jellySpriteList;
@@ -73,12 +74,21 @@ public class GameManager : MonoBehaviour
     void GameStart()
     {
         // 초기화
-        scoreUp = 1;
-        scoreTimer = 0;
         speed = 1;
+        speedTimer = 0;
+        speedLevel = 1;
+        speedUp = 0;
+
+        score = 0;
+        scoreTimer = 0;
+        scoreUp = 1;
+
         skillSlider.value = 0;
         speedSlider.value = 1;
+
         isOver = false;
+        isOption = false;
+
         player.gameObject.SetActive(true);
         
         // 스킬 지속시간, 쿨타임 구하기
@@ -114,7 +124,8 @@ public class GameManager : MonoBehaviour
                 speedLevel = 10.5f;
 
             // Level Text
-            levelText.text = "Lv." + (speedLevel * 2 - 1);
+            if (!isOver)
+                levelText.text = "Stage " + (speedLevel * 2 - 1);
 
             speedTimer = 0;
         }
@@ -174,16 +185,16 @@ public class GameManager : MonoBehaviour
 
     public void OptionButton()
     {
-        if (Time.timeScale == 0)
+        if (Time.timeScale == 1)
         {
-            Time.timeScale = 1;
+            Time.timeScale = 0;
             optionPanel.SetActive(true);
             // Audio
             audioManager.SfxPlay("Pause In");
         }
         else
         {
-            Time.timeScale = 0;
+            Time.timeScale = 1;
             optionPanel.SetActive(false);
             // Audio
             audioManager.SfxPlay("Pause Out");
@@ -195,7 +206,6 @@ public class GameManager : MonoBehaviour
         int randNum = Random.Range(0, skillSpriteList.Length);
         GameObject enemy = objectManager.Get(randNum);
         enemy.transform.position = spawnPoint.position;
-
     }
 
     // ------------- 스킬 관련 함수들
@@ -492,10 +502,12 @@ public class GameManager : MonoBehaviour
         CallExplosion(player.transform.position + Vector3.up * 0.5f);
         player.gameObject.SetActive(false);
 
+        if (isOption)
+            return;
+
+        overPanel.SetActive(true);
         jelatinOver.text = "+ " + score.ToString("F0");
         MainGameManager.instance.AddJelatin(score);
-        //StopSwitch();
-        overPanel.SetActive(true);
 
         // High Score Update
         Variables.highScore = Mathf.Max(Variables.highScore, score);
@@ -512,12 +524,24 @@ public class GameManager : MonoBehaviour
     {
         fadeAc.SetTrigger("doFadeOut");
         audioManager.SfxPlay("Button");
+
+        MainGameManager.instance.GameSave();
+
         StartCoroutine(GoToMenuExe(2));
     }
     public void GoToMenu()
     {
+        // 타임스케일은 1로 만들기 (옵션에서 타임스케일값이 0임)
+        Time.timeScale = 1;
+
+        // 순간적으로 게임오버되어도 bool변수 덕에 게임오버와 관련된 내용은 나오지 않음
+        isOption = true;
+
+
         fadeAc.SetTrigger("doFadeOut");
         audioManager.SfxPlay("Button");
+
+        MainGameManager.instance.GameSave();
 
         StartCoroutine(GoToMenuExe(1));
     }
