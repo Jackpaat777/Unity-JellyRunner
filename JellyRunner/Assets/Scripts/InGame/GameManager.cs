@@ -12,33 +12,40 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    [Header("---------------[Audio]")]
-    public AudioManager audioManager;
+    [Header("---------------[InGame]")]
+    public float speed;
+    public int score;
+    public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI highScoreText;
+    float speedTimer;
+    float speedLevel;
+    float speedUp;
+    float scoreTimer;
+    int scoreUp;
+    bool isOver;
 
-    [Header ("---------------[Jelly]")]
+    [Header ("---------------[Information]")]
     public Sprite[] jellySpriteList;
-    public string[] jellyNameList;
-    public Sprite sharkSkillSprite;
+    public Sprite[] skillSpriteList;
+    public float[] skillDurationList;
+    public float[] skillDurationUpList;
+    public float[] skillCoolList;
+    public float[] skillCoolDownList;
 
     [Header("---------------[Player]")]
     public Player player;
     public Animator playerAc;
 
     [Header("---------------[Skill]")]
-    public float[] skillDurationList;
-    public float[] skillDurationUpList;
-    public float[] skillCoolList;
-    public float[] skillCoolDownList;
-    public string[] skillName;
-    public Sprite[] skillSpriteList;
     public Button skillButton;
     public Image skillBackImage;
     public Slider skillSlider;
     public GameObject skillSliderArea;
-    public float skillDurationTime;
-    public float skillCoolTime;
-    public float skillTimer;
-    public float coolTimer;
+    float skillDurationTime;
+    float skillCoolTime;
+    float skillTimer;
+    float coolTimer;
     bool onSkill;
     bool onCool;
 
@@ -48,51 +55,54 @@ public class GameManager : MonoBehaviour
     float spawnTimer;
     float spawnDelay;
 
-    [Header("---------------[InGame]")]
-    public float speed;
-    public float speedTimer;
-    public float speedLevel;
-    public float speedUp;
-    public int score;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI speedText;
-    public TextMeshProUGUI highScoreText;
-    public int groundCount;
-    int scoreUp;
-    float scoreTimer;
-
     [Header("---------------[UI]")]
     public TextMeshProUGUI jelatinOver;
     public GameObject optionPanel;
     public GameObject overPanel;
     public Slider speedSlider;
+    public Animator fadeAc;
+
+    [Header("---------------[Audio]")]
+    public AudioManager audioManager;
 
     void Awake()
     {
         instance = this;
         GameStart();
     }
-
     void GameStart()
     {
-        Time.timeScale = 1;
+        // 초기화
         scoreUp = 1;
         scoreTimer = 0;
         speed = 1;
         skillSlider.value = 0;
         speedSlider.value = 1;
-
-        audioManager.BgmPlay("Game");
+        isOver = false;
+        player.gameObject.SetActive(true);
         
         // 스킬 지속시간, 쿨타임 구하기
         int idx = Variables.jellyTypeNum;
         skillDurationTime = skillDurationList[idx] + (Variables.skillLevel[idx] * skillDurationUpList[idx]);
         skillCoolTime = skillCoolList[idx] - (Variables.skillLevel[idx] * skillCoolDownList[idx]);
+
+        // 스킬 이미지
+        skillBackImage.sprite = skillSpriteList[Variables.jellyTypeNum];
+        skillButton.image.sprite = skillBackImage.sprite;
+
+        audioManager.BgmPlay("Game");
+        fadeAc.SetTrigger("doFadeIn");
     }
 
     void Update()
     {
-        // Speed Level
+        SpeedLevel();
+        Scoring();
+        Spawner();
+        Skill();
+    }
+    void SpeedLevel()
+    {
         // 일정 시간마다 스피드 증가
         speedTimer += Time.deltaTime;
         speedSlider.value = speedTimer / 30;
@@ -104,14 +114,18 @@ public class GameManager : MonoBehaviour
                 speedLevel = 10.5f;
 
             // Level Text
-            speedText.text = "Lv." + (speedLevel * 2 - 1);
+            levelText.text = "Lv." + (speedLevel * 2 - 1);
 
             speedTimer = 0;
         }
         // 최종 speed 값
         speed = speedLevel + speedUp;
+    }
+    void Scoring()
+    {
+        if (isOver)
+            return;
 
-        // Scoring
         scoreTimer += Time.deltaTime;
         if (scoreTimer > 0.1f)
         {
@@ -120,8 +134,9 @@ public class GameManager : MonoBehaviour
             scoreText.text = score.ToString("N0");
             scoreTimer = 0;
         }
-
-        // Enemy Spawn
+    }
+    void Spawner()
+    {
         spawnTimer += Time.deltaTime;
         if (spawnTimer > spawnDelay)
         {
@@ -129,10 +144,11 @@ public class GameManager : MonoBehaviour
             spawnTimer = 0;
             spawnDelay = Random.Range(1.5f, 3f);
         }
-
-        // Skill
-        skillBackImage.sprite = skillSpriteList[Variables.jellyTypeNum];
-        skillButton.image.sprite = skillBackImage.sprite;
+    }
+    void Skill()
+    {
+        if (isOver)
+            return;
 
         if (onCool)     // 쿨타임 시작
         {
@@ -154,35 +170,20 @@ public class GameManager : MonoBehaviour
                 ExecuteJellySkill();
             }
         }
-
-
     }
 
-    public void StopSwitch()
-    {
-        // 게임을 멈추고 키는 스위치 (버튼조작도 막아놓기)
-        if (Time.timeScale == 1)
-        {
-            Time.timeScale = 0;
-            skillButton.interactable = false;
-        }
-        else
-        {
-            Time.timeScale = 1;
-            skillButton.interactable = true;
-        }
-    }
     public void OptionButton()
     {
-        StopSwitch();
         if (Time.timeScale == 0)
         {
+            Time.timeScale = 1;
             optionPanel.SetActive(true);
             // Audio
             audioManager.SfxPlay("Pause In");
         }
         else
         {
+            Time.timeScale = 0;
             optionPanel.SetActive(false);
             // Audio
             audioManager.SfxPlay("Pause Out");
@@ -191,7 +192,7 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy()
     {
         // 랜덤 적 생성 (오브젝트매니저에서 랜덤값의 인덱스가 넘겨짐)
-        int randNum = Random.Range(0, jellySpriteList.Length);
+        int randNum = Random.Range(0, skillSpriteList.Length);
         GameObject enemy = objectManager.Get(randNum);
         enemy.transform.position = spawnPoint.position;
 
@@ -436,7 +437,7 @@ public class GameManager : MonoBehaviour
     void AllKill()
     {
         // 올 킬
-        for (int i = 0; i < jellySpriteList.Length; i++)
+        for (int i = 0; i < skillSpriteList.Length; i++)
         {
             objectManager.DisableEnemy(i);
         }
@@ -485,9 +486,15 @@ public class GameManager : MonoBehaviour
     // ------------- 게임작동 관련 함수들
     public void GameOver()
     {
+        isOver = true;
+
+        // Player
+        CallExplosion(player.transform.position + Vector3.up * 0.5f);
+        player.gameObject.SetActive(false);
+
         jelatinOver.text = "+ " + score.ToString("F0");
         MainGameManager.instance.AddJelatin(score);
-        StopSwitch();
+        //StopSwitch();
         overPanel.SetActive(true);
 
         // High Score Update
@@ -503,10 +510,24 @@ public class GameManager : MonoBehaviour
     }
     public void RestartGame()
     {
-        SceneManager.LoadScene(1);
+        fadeAc.SetTrigger("doFadeOut");
+        audioManager.SfxPlay("Button");
+        StartCoroutine(GoToMenuExe(2));
     }
     public void GoToMenu()
     {
-        SceneManager.LoadScene("1.MainMenuScene");
+        fadeAc.SetTrigger("doFadeOut");
+        audioManager.SfxPlay("Button");
+
+        StartCoroutine(GoToMenuExe(1));
+    }
+    IEnumerator GoToMenuExe(int type)
+    {
+        yield return new WaitForSeconds(1.0f);
+
+        if (type == 1)
+            SceneManager.LoadScene("1.MainMenuScene");
+        else if (type == 2)
+            SceneManager.LoadScene("2.InGameScene");
     }
 }

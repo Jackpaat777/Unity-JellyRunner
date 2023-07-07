@@ -32,7 +32,6 @@ public class Jelly : MonoBehaviour
             isWalk = false;
         RandomPosition();
     }
-
     void RandomPosition()
     {
         float randX = Random.Range(-5f, 5f);
@@ -73,7 +72,6 @@ public class Jelly : MonoBehaviour
             changeTime = Random.Range(2f, 8f);
         }
     }
-
     void Idle()
     {
         anim.SetBool("isWalk", false);
@@ -88,7 +86,6 @@ public class Jelly : MonoBehaviour
             changeTime = Random.Range(2f, 8f);
         }
     }
-
     void Turn()
     {
         if (transform.position.x < -5.5f || transform.position.x > 5.5f)

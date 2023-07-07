@@ -31,14 +31,12 @@ public class MainGameManager : MonoBehaviour
 {
     public static MainGameManager instance;
 
-    [Header("---------------[Audio]")]
-    public AudioManager audioManager;
-
     [Header("---------------[Main UI]")]
     public GameObject[] jellyInMenu;
     public TextMeshProUGUI jelatinText;
     public TextMeshProUGUI goldText;
     public GameObject optionPanel;
+    public Animator fadeAc;
 
     [Header("---------------[Infomation]")]
     public string[] jellyNameList;
@@ -126,14 +124,20 @@ public class MainGameManager : MonoBehaviour
     public TextMeshProUGUI SubNameInSelect;
     public Button selectButton;
 
+    [Header("---------------[Audio]")]
+    public AudioManager audioManager;
+
 
     void Awake()
+    {
+        instance = this;
+        MainStart();
+    }
+    void MainStart()
     {
         // 60프레임
         Application.targetFrameRate = 60;
 
-        if (instance == null)
-            instance = this;
         Variables.isLock[0] = false;
         Time.timeScale = 1;
 
@@ -144,16 +148,24 @@ public class MainGameManager : MonoBehaviour
         UpdateMainJelly();
 
         audioManager.BgmPlay("Menu");
+        fadeAc.SetTrigger("doFadeIn");
     }
 
     void Update()
+    {
+        UpdateText();
+        RollCard();
+    }
+    void UpdateText()
     {
         // 보유 젤라틴, 골드 텍스트 실시간 업데이트
         jelatinText.text = Variables.jelatin.ToString("N0");
         goldText.text = Variables.gold.ToString("N0");
         havingJelatinTextInPower.text = Variables.jelatin.ToString("N0");
         storeGoldText.text = Variables.gold.ToString("N0");
-
+    }
+    void RollCard()
+    {
         // 카드 돌리기
         if (isRollStart)
         {
@@ -185,7 +197,7 @@ public class MainGameManager : MonoBehaviour
     public void UpdateMainJelly()
     {
         // 뽑기가 끝나고 나올 때도 업데이트 (Return Button)
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < skillSpriteList.Length; i++)
         {
             if (!Variables.isLock[i])
                 jellyInMenu[i].SetActive(true);
@@ -352,7 +364,7 @@ public class MainGameManager : MonoBehaviour
                 typeText = "지속시간동안 적을 밟을 수 있습니다.";
                 break;
             case 4:
-                typeText = "지속시간간 투명화되어 적들을 무시할 수 있습니다.";
+                typeText = "지속시간동안 투명화되어 적들을 무시할 수 있습니다.";
                 break;
             case 5:
                 typeText = "한번의 공격을 무시하는 베리어를 생성합니다.\n(베리어가 파괴되면 쿨타임 시작)";
@@ -591,12 +603,12 @@ public class MainGameManager : MonoBehaviour
     public void JelatinUpButton()
     {
         // 비율 값 변경
-        jelainRatioInt += 100;
+        jelainRatioInt += 1000;
 
         // 보유 젤라틴보다 많아질 경우
         if (jelainRatioInt > Variables.jelatin)
         {
-            jelainRatioInt -= 100;
+            jelainRatioInt -= 1000;
             return;
         }
 
@@ -608,12 +620,12 @@ public class MainGameManager : MonoBehaviour
     public void JelatinDownButton()
     {
         // 비율 값 변경
-        jelainRatioInt -= 100;
+        jelainRatioInt -= 1000;
 
         // 기본 젤라틴보다 적어질 경우
         if (jelainRatioInt < 1000)
         {
-            jelainRatioInt += 100;
+            jelainRatioInt += 1000;
             return;
         }
 
@@ -628,8 +640,8 @@ public class MainGameManager : MonoBehaviour
         if (Variables.jelatin < 1000)
             return;
 
-        // 비율값을 전액으로 (백단위)
-        jelainRatioInt = Variables.jelatin - Variables.jelatin % 100;
+        // 비율값을 전액으로 (천단위)
+        jelainRatioInt = Variables.jelatin - Variables.jelatin % 1000;
         goldRatioInt = jelainRatioInt / 10;
         // 비율 텍스트 변경
         jelatinRatio.text = jelainRatioInt.ToString();
@@ -682,6 +694,7 @@ public class MainGameManager : MonoBehaviour
         if (Variables.gold < 1000)
         {
             unableText.SetActive(true);
+            newText.SetActive(false);
             // Audio
             audioManager.SfxPlay("Fail");
             return;
@@ -883,7 +896,15 @@ public class MainGameManager : MonoBehaviour
     // 게임작동 관련 함수
     public void GameStart()
     {
+        fadeAc.SetTrigger("doFadeOut");
         audioManager.SfxPlay("Button");
+
+        StartCoroutine(GameStartExe());
+    }
+    IEnumerator GameStartExe()
+    {
+        yield return new WaitForSeconds(1.0f);
+
         SceneManager.LoadScene("2.InGameScene");
     }
     public void GameExit()
@@ -899,7 +920,7 @@ public class MainGameManager : MonoBehaviour
         // GameOver() 함수에도 들어감
         PlayerPrefs.SetInt("Jelatin", Variables.jelatin);
         PlayerPrefs.SetInt("Gold", Variables.gold);
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < skillSpriteList.Length; i++)
         {
             PlayerPrefs.SetInt("isLock" + i, Variables.isLock[i] ? 1 : 0);
             PlayerPrefs.SetInt("Level" + i, Variables.skillLevel[i]);
@@ -916,7 +937,7 @@ public class MainGameManager : MonoBehaviour
 
         Variables.jelatin = PlayerPrefs.GetInt("Jelatin");
         Variables.gold = PlayerPrefs.GetInt("Gold");
-        for (int i = 0; i < 11; i++)
+        for (int i = 0; i < skillSpriteList.Length; i++)
         {
             Variables.isLock[i] = PlayerPrefs.GetInt("isLock" + i) == 1 ? true : false;
             Variables.skillLevel[i] = PlayerPrefs.GetInt("Level" + i);

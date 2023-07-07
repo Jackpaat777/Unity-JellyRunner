@@ -16,14 +16,14 @@ public class Player : MonoBehaviour
         GIANT
     }
 
+    public float jumpPowerUp;
     public GameObject barrierSensor;
     public GameObject pressSensor;
     public GameObject giantSensor;
     public GameObject bullet;
-    public float jumpPowerUp;
     public SkillType skillType;
 
-    bool isJumpButton;  // 점프 버튼 관련 변수
+    bool isJumpButton;
     float jumpPower;
     int jumpNum;
     Rigidbody2D rigid;
@@ -46,12 +46,7 @@ public class Player : MonoBehaviour
         // Move Anim
         anim.SetFloat("runSpeed", GameManager.instance.speed);
 
-        // SKill Button
-        if (Input.GetKeyDown(KeyCode.K))
-            GameManager.instance.OnSkill();
-
         // Jump
-        // Input.GetButtonDown("Jump")
         if (isJumpButton && skillType != SkillType.GIANT && skillType != SkillType.BUSTER)
         {
             // double Jump가 켜져있을 때
@@ -113,7 +108,6 @@ public class Player : MonoBehaviour
         // Audio
         GameManager.instance.audioManager.SfxPlay("Jump");
     }
-
     public void JumpButton()
     {
         isJumpButton = true;
@@ -144,7 +138,7 @@ public class Player : MonoBehaviour
     {
         skillType = SkillType.BUSTER;
         if (transform.position.y < 0.1f)
-            spriteRenderer.sprite = GameManager.instance.sharkSkillSprite;
+            spriteRenderer.sprite = GameManager.instance.jellySpriteList[11];
     }
     public void BustOff()
     {
@@ -159,7 +153,7 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isJump", false);
             jumpNum = 0; // 더블점프용 변수
-            GameManager.instance.audioManager.SfxPlay("Land");
+            //GameManager.instance.audioManager.SfxPlay("Land");
         }
 
         if (collision.gameObject.tag == "Enemy")

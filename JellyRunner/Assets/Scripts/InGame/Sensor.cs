@@ -34,6 +34,7 @@ public class Sensor : MonoBehaviour
                 GameManager.instance.OffSkill();
                 GameManager.instance.OnCool();
             }
+
             // 밟기는 isPressSensor가 켜진 센서에서만 작동
             else if (sensorType == SensorType.PRESS && player.skillType == Player.SkillType.PRESS_DOWN)
             {
@@ -45,6 +46,7 @@ public class Sensor : MonoBehaviour
                 GameManager.instance.audioManager.SfxPlay("Explosion");
 
             }
+
             // 거대화로 적 처치는 isGiantSensor가 켜진 센서에서만 작동
             else if (sensorType == SensorType.GIANT && player.skillType == Player.SkillType.GIANT)
             {
@@ -53,6 +55,7 @@ public class Sensor : MonoBehaviour
                 // Audio
                 GameManager.instance.audioManager.SfxPlay("Explosion");
             }
+
             else if (player.skillType == Player.SkillType.INVISIBLE || player.skillType == Player.SkillType.BUSTER)
             {
                 collision.isTrigger = true;

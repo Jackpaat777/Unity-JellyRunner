@@ -41,7 +41,6 @@ public class AudioManager : MonoBehaviour
 
         MainGameManager.instance.GameSave();
     }
-
     public void SFXControl()
     {
         Variables.sfxVolume = sliderSFX.value;
@@ -77,12 +76,10 @@ public class AudioManager : MonoBehaviour
 
         bgmPlayer.Play();
     }
-
     public void BgmStop()
     {
         bgmPlayer.Stop();
     }
-
     public void SfxPlay(string type)
     {
         switch (type)
