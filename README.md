@@ -9,30 +9,30 @@
 </div>
 <br/><br/>
 
-
 ## 🎮 게임방법 🎮
 ### ※ 터치로만 조작합니다.
 #### 1. 보유중인 젤리를 선택하여 게임을 플레이 합니다.<br/>
-  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/4892d665-e9d9-4d73-aee4-80cb92a8f503"/><br/><br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/9504af46-2f9d-4497-91f7-54817661ec8e"/><br/><br/>
 #### 2. 플레이어는 점프로 적들을 피하며 이동거리에 따라 젤라틴(인게임 재화)을 획득합니다.<br/>
-  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/622888e5-0341-4202-808e-e1c93f40ddfd"/><br/><br/>
-#### 3. 젤리마다 고유한 스킬을 사용할 수 있습니다.<br/>
-  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/8c806174-6695-496b-8eb2-5aeec357f7ae"/><br/><br/>
-#### 4. 젤라틴을 이용해 젤리를 강화하거나 환전을 하여 다양한 젤리를 해금할 수 있습니다.<br/>
-  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/46f50896-8c52-4329-8dbc-4886615882ab"/><br/><br/>
-#### 5. 골드를 사용하여 뽑기를 할 수 있으며, 젤리의 뽑기 확률이 낮을수록 좋은 성능을 가지고 있습니다.<br/>
-  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/e6d94950-dced-4f42-b93e-9642e0a45db2"/><br/><br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/bc475520-63f5-4732-a26a-f313a8122269"/><br/><br/>
+#### 3. 플레이어와 적이 충돌하면 게임오버됩니다.<br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/085fa62a-202e-49d1-a2e0-a76cff2036cb"/><br/><br/>
+#### 4. 젤리마다 고유한 스킬을 사용할 수 있습니다.<br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/1353b7d8-460c-48f7-8d81-47de8dcf1b46"/><br/><br/>
+#### 5. 젤라틴을 이용해 젤리를 강화하거나 환전을 할 수 있습니다.<br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/f61e52ef-c393-44b9-a035-c85b7e938f0f"/><br/><br/>
+#### 6. 골드를 사용하여 뽑기를 할 수 있으며, 젤리의 뽑기 확률이 낮을수록 좋은 성능을 가지고 있습니다.<br/>
+  <img width="500" src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/3fa4a327-428f-4653-bb52-10c851d0167f"/><br/><br/>
 <br/><br/>
-
 
 ## 🎬 데모영상 🎬
 
 ### 로비
-<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/7343cd99-df96-43ab-aeed-8717dfd9c56b" controls style="max-width: 600px;">
+<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/88a7c141-542c-449e-8649-381938265b89" controls style="max-width: 600px;">
 </video>
 
 ### 인게임
-<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/7f751157-267a-4362-a7d8-ba0c555e291c" controls style="max-width: 600px;">
+<video src="https://github.com/JongWon777/Unity-JellyRunner/assets/83633363/fb7884f4-e217-4605-96d5-2587a218209b" controls style="max-width: 600px;">
 </video>
 
 <br/><br/>
