@@ -7,16 +7,20 @@ public class TitleGameManager : MonoBehaviour
 {
     public AudioManager audioManager;
     public Animator fadeAc;
+    bool onButton;
 
     private void Awake()
     {
         VolumeLoad();
         audioManager.BgmPlay("Title");
+        onButton = false;
     }
 
     void Update()
-    {if (Input.GetMouseButtonDown(0))
+    {
+        if (Input.GetMouseButtonDown(0) && !onButton)
         {
+            onButton = true;
             GoToGame();
         }
     }

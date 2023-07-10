@@ -19,7 +19,6 @@ public static class Variables
     public static int gold = 0;
     public static int jellyTypeNum = 0;
     public static bool[] isLock = { false, true, true, true, true, true, true, true, true, true, true };
-    //public static bool[] isLock = { false, false, false, false, false, false, false, false, false, false, false };
     public static int[] skillLevel = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     public static float bgmVolume = -20f;
     public static float sfxVolume = -20f;
@@ -274,7 +273,10 @@ public class MainGameManager : MonoBehaviour
         // 스킬 이미지
         skillImageInCollection.sprite = skillSpriteList[collectionPageNum];
         // 스킬 레벨
-        jellySkillLevel.text = "Lv." + (Variables.skillLevel[collectionPageNum] + 1);
+        if (Variables.skillLevel[collectionPageNum] < 9)
+            jellySkillLevel.text = $"Lv.{Variables.skillLevel[collectionPageNum] + 1}";
+        else
+            jellySkillLevel.text = "Lv.MAX";
         // 스킬 내용
         jellySkillDetail.text = SkillText(collectionPageNum);
 
@@ -498,7 +500,12 @@ public class MainGameManager : MonoBehaviour
         jellyImageInPower.SetNativeSize();
 
         // Level (실제 값보다 1높게 보이도록)
-        levelTextInPower.text = "Lv." + (Variables.skillLevel[jellyIdx] + 1);
+        if (Variables.skillLevel[jellyIdx] < 8)
+            levelTextInPower.text = $"Lv.{Variables.skillLevel[jellyIdx] + 1} ▶ {Variables.skillLevel[jellyIdx] + 2}";
+        else if (Variables.skillLevel[jellyIdx] == 8)
+            levelTextInPower.text = $"Lv.{Variables.skillLevel[jellyIdx] + 1} ▶ MAX";
+        else
+            levelTextInPower.text = "Lv.MAX";
 
         // Text
         // 현재 지속시간, 쿨타임 값 / 다음 지속시간, 쿨타임 값 가져오기
@@ -547,7 +554,7 @@ public class MainGameManager : MonoBehaviour
         CanPowerUp();
 
         // Audio
-        audioManager.SfxPlay("Button");
+        audioManager.SfxPlay("Buy");
     }
     public void PowerUpButton()
     {
