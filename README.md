@@ -2,6 +2,11 @@
 #### Unity로 개발한 모바일 게임 '젤리 러너'입니다.
 <br/><br/>
 
+## ⭐ 다운로드 ⭐
+#### 아래 주소를 통해 플레이스토어에서 다운받아 즐기실 수 있습니다!
+https://play.google.com/store/apps/details?id=com.KJWStdio.JellyRunner<br/>
+<br/><br/>
+
 ## 📚 사용기술 📚
 <div>
   <img height="30" src="https://img.shields.io/badge/Unity-333333?style=flat&logo=unity&logoColor=white"/>
